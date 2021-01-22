@@ -14,10 +14,10 @@ import { Marks } from './Marks';
 const width = 960;
 const height = 500;
 const margin = {
-  top: 20,
+  top: 50,
   right: 30,
   bottom: 150,
-  left: 250,
+  left: 100,
 };
 const barWidth = 8;
 
@@ -54,6 +54,14 @@ const App = () => {
       <g
         transform={`translate(${margin.left},${margin.top})`}
       >
+        <text
+          className="chart-title"
+          x={innerWidth / 2}
+          y={-20}
+          textAnchor="middle"
+        >
+          Fitbit Daily Steps
+        </text>
         <AxisBottom
           xScale={xScale}
           innerHeight={innerHeight}

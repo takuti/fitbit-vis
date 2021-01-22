@@ -88,10 +88,10 @@
   var width = 960;
   var height = 500;
   var margin = {
-    top: 20,
+    top: 50,
     right: 30,
     bottom: 150,
-    left: 250,
+    left: 100,
   };
   var barWidth = 8;
 
@@ -127,6 +127,8 @@
       React__default['default'].createElement( 'svg', { width: width, height: height },
         React__default['default'].createElement( 'g', {
           transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
+          React__default['default'].createElement( 'text', {
+            className: "chart-title", x: innerWidth / 2, y: -20, textAnchor: "middle" }, "Fitbit Daily Steps"),
           React__default['default'].createElement( AxisBottom, {
             xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5, barWidth: barWidth }),
           React__default['default'].createElement( 'text', {
