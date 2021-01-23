@@ -26,6 +26,26 @@
     return data;
   };
 
+  var url$1 = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/sleep.csv';
+
+  var row$1 = function (d) {
+    d.date = new Date(d['End Time'].substring(0, 10));  // YYYY-MM-DD
+    d.value = +d['Minutes Asleep'];
+    return d;
+  };
+
+  var useSleep = function () {
+    var ref = React$1.useState(null);
+    var data = ref[0];
+    var setData = ref[1];
+
+    React$1.useEffect(function () {
+      d3.csv(url$1, row$1).then(setData); 
+    }, []);
+
+    return data;
+  };
+
   var AxisBottom = function (ref) {
       var xScale = ref.xScale;
       var innerHeight = ref.innerHeight;
@@ -146,8 +166,9 @@
 
   var App = function () {
     var activities = useActivities();
+    var sleep = useSleep();
 
-    if (!activities) {
+    if (!activities || !sleep) {
       return React__default['default'].createElement( 'pre', null, "Loading..." );
     }
 

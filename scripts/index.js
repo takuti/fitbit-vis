@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useActivities } from './useActivities';
+import { useSleep } from './useSleep';
 import { BarChart } from './BarChart/index.js';
 
 const width = 960;
@@ -8,8 +9,9 @@ const height = 500;
 
 const App = () => {
   const activities = useActivities();
+  const sleep = useSleep();
 
-  if (!activities) {
+  if (!activities || !sleep) {
     return <pre>Loading...</pre>;
   }
 
