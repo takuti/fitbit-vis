@@ -83,31 +83,28 @@
     ); });
   };
 
-  var width = 960;
-  var height = 500;
   var margin = {
     top: 50,
     right: 30,
     bottom: 150,
     left: 100,
   };
+
   var barWidth = 8;
 
   var xValue = function (d) { return d.dateTime; };
   var xAxisLabel = 'Date';
-  var xAxisLabelOffset = 100;
   var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
+  var xAxisLabelOffset = 100;
 
   var yValue = function (d) { return d.value; };
   var yAxisLabel = 'Steps';
   var yAxisLabelOffset = 60;
 
-  var App = function () {
-    var data = useData();
-
-    if (!data) {
-      return React__default['default'].createElement( 'pre', null, "Loading..." );
-    }
+  var BarChart = function (ref) {
+    var data = ref.data;
+    var width = ref.width;
+    var height = ref.height;
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -122,26 +119,42 @@
       .range([innerHeight, 0]);
 
     return (
+      React.createElement( 'g', {
+        transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
+        React.createElement( 'text', {
+          className: "chart-title", x: innerWidth / 2, y: -20, textAnchor: "middle" }, "Fitbit Daily Steps"),
+        React.createElement( AxisBottom, {
+          xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5, barWidth: barWidth }),
+        React.createElement( 'text', {
+          className: "axis-label", x: innerWidth / 2, y: innerHeight + xAxisLabelOffset, textAnchor: "middle" },
+          xAxisLabel
+        ),
+        React.createElement( AxisLeft, {
+          yScale: yScale, innerWidth: innerWidth, tickOffset: 5 }),
+        React.createElement( 'text', {
+          className: "axis-label", textAnchor: "middle", transform: ("translate(" + (-yAxisLabelOffset) + "," + (innerHeight / 2) + ") rotate(-90)") },
+          yAxisLabel
+        ),
+        React.createElement( Marks, {
+          data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, innerHeight: innerHeight, barWidth: barWidth })
+      )
+    );
+  };
+
+  var width = 960;
+  var height = 500;
+
+  var App = function () {
+    var data = useData();
+
+    if (!data) {
+      return React__default['default'].createElement( 'pre', null, "Loading..." );
+    }
+
+    return (
       React__default['default'].createElement( 'svg', { width: width, height: height },
-        React__default['default'].createElement( 'g', {
-          transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
-          React__default['default'].createElement( 'text', {
-            className: "chart-title", x: innerWidth / 2, y: -20, textAnchor: "middle" }, "Fitbit Daily Steps"),
-          React__default['default'].createElement( AxisBottom, {
-            xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5, barWidth: barWidth }),
-          React__default['default'].createElement( 'text', {
-            className: "axis-label", x: innerWidth / 2, y: innerHeight + xAxisLabelOffset, textAnchor: "middle" },
-            xAxisLabel
-          ),
-          React__default['default'].createElement( AxisLeft, {
-            yScale: yScale, innerWidth: innerWidth, tickOffset: 5 }),
-          React__default['default'].createElement( 'text', {
-            className: "axis-label", textAnchor: "middle", transform: ("translate(" + (-yAxisLabelOffset) + "," + (innerHeight / 2) + ") rotate(-90)") },
-            yAxisLabel
-          ),
-          React__default['default'].createElement( Marks, {
-            data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, innerHeight: innerHeight, barWidth: barWidth })
-        )
+       React__default['default'].createElement( BarChart, { 
+        data: data, width: width, height: height })
       )
     );
   };
