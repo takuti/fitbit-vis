@@ -7,7 +7,7 @@ const width = 960;
 const height = 500;
 
 const App = () => {
-  const activities = useActivities('https://api.fitbit.com/1/user/-/activities/steps/date/today/1m.json');
+  const activities = useActivities();
 
   if (!activities) {
     return <pre>Loading...</pre>;

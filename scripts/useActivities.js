@@ -12,7 +12,7 @@ const row = (d) => {
   return d;
 };
 
-export const useActivities = (endpoint) => {
+export const useActivities = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {

@@ -14,7 +14,7 @@
     return d;
   };
 
-  var useActivities = function (endpoint) {
+  var useActivities = function () {
     var ref = React$1.useState(null);
     var data = ref[0];
     var setData = ref[1];
