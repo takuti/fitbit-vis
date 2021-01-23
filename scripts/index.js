@@ -1,22 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { useData } from './useData';
+import { useActivities } from './useActivities';
 import { BarChart } from './BarChart/index.js';
 
 const width = 960;
 const height = 500;
 
 const App = () => {
-  const data = useData('https://api.fitbit.com/1/user/-/activities/steps/date/today/1m.json');
+  const activities = useActivities('https://api.fitbit.com/1/user/-/activities/steps/date/today/1m.json');
 
-  if (!data) {
+  if (!activities) {
     return <pre>Loading...</pre>;
   }
 
   return (
     <svg width={width} height={height}>
      <BarChart 
-      data={data}
+      data={activities}
       width={width}
       height={height}
      />

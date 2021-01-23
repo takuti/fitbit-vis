@@ -14,7 +14,7 @@
     return d;
   };
 
-  var useData = function (endpoint) {
+  var useActivities = function (endpoint) {
     var ref = React$1.useState(null);
     var data = ref[0];
     var setData = ref[1];
@@ -145,16 +145,16 @@
   var height = 500;
 
   var App = function () {
-    var data = useData();
+    var activities = useActivities();
 
-    if (!data) {
+    if (!activities) {
       return React__default['default'].createElement( 'pre', null, "Loading..." );
     }
 
     return (
       React__default['default'].createElement( 'svg', { width: width, height: height },
        React__default['default'].createElement( BarChart, { 
-        data: data, width: width, height: height })
+        data: activities, width: width, height: height })
       )
     );
   };
