@@ -2,23 +2,21 @@ import {
   useState,
   useEffect,
 } from 'react';
-import { json } from 'd3';
+import { csv } from 'd3';
 
-const token = '';
+const url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/activities.csv';
+
+const row = (d) => {
+  d.dateTime = new Date(d.Date);
+  d.value = +d.Steps.replace(',', '');
+  return d;
+};
 
 export const useData = (endpoint) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    json(endpoint, {
-      headers: new Headers({ 'Authorization': `Bearer ${token}` })
-    }).then((data) => {
-      data['activities-steps'].forEach(d => {
-        d.dateTime = new Date(d.dateTime);
-        d.value = +d.value;
-      });
-      setData(data['activities-steps']);
-    });
+    csv(url, row).then(setData) 
   }, []);
 
   return data;

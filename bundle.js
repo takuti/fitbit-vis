@@ -6,7 +6,13 @@
   var React__default = /*#__PURE__*/_interopDefaultLegacy(React$1);
   var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
 
-  var token = '';
+  var url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/activities.csv';
+
+  var row = function (d) {
+    d.dateTime = new Date(d.Date);
+    d.value = +d.Steps.replace(',', '');
+    return d;
+  };
 
   var useData = function (endpoint) {
     var ref = React$1.useState(null);
@@ -14,15 +20,7 @@
     var setData = ref[1];
 
     React$1.useEffect(function () {
-      d3.json(endpoint, {
-        headers: new Headers({ 'Authorization': ("Bearer " + token) })
-      }).then(function (data) {
-        data['activities-steps'].forEach(function (d) {
-          d.dateTime = new Date(d.dateTime);
-          d.value = +d.value;
-        });
-        setData(data['activities-steps']);
-      });
+      d3.csv(url, row).then(setData); 
     }, []);
 
     return data;
@@ -105,7 +103,7 @@
   var yAxisLabelOffset = 60;
 
   var App = function () {
-    var data = useData('https://api.fitbit.com/1/user/-/activities/steps/date/today/1m.json');
+    var data = useData();
 
     if (!data) {
       return React__default['default'].createElement( 'pre', null, "Loading..." );
