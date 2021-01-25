@@ -149,6 +149,8 @@
     ]
   };
 
+  var xDropdownLabel = 'Sleep Metric';
+  var yDropdownLabel = 'Activitiy Metric';
   var getLabel = function (axis, attribute) {
     for (var i = 0; i < attributes[axis].length; i++) {
       if (attributes[axis][i].value === attribute) {
@@ -198,14 +200,14 @@
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'div', { className: "menus-container" },
-          React__default['default'].createElement( 'span', { className: "dropdown-label" }, "X"),
+          React__default['default'].createElement( 'span', { className: "dropdown-label" }, "X (", xDropdownLabel, ") "),
           React__default['default'].createElement( ReactDropdown__default['default'], {
             options: attributes['x'], value: xAttribute, onChange: function (ref) {
               var value = ref.value;
 
               return setXAttribute(value);
     } }),
-          React__default['default'].createElement( 'span', { className: "dropdown-label" }, "Y"),
+          React__default['default'].createElement( 'span', { className: "dropdown-label" }, "Y (", yDropdownLabel, ")"),
           React__default['default'].createElement( ReactDropdown__default['default'], {
             options: attributes['y'], value: yAttribute, onChange: function (ref) {
               var value = ref.value;

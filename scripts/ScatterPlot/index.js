@@ -34,6 +34,8 @@ const attributes = {
   ]
 };
 
+const xDropdownLabel = 'Sleep Metric';
+const yDropdownLabel = 'Activitiy Metric';
 const getLabel = (axis, attribute) => {
   for (let i = 0; i < attributes[axis].length; i++) {
     if (attributes[axis][i].value === attribute) {
@@ -79,13 +81,13 @@ export const ScatterPlot = ({
   return (
     <>
       <div className="menus-container">
-        <span className="dropdown-label">X</span>
+        <span className="dropdown-label">X ({xDropdownLabel}) </span>
         <ReactDropdown
           options={attributes['x']}
           value={xAttribute}
           onChange={({ value }) => setXAttribute(value)}
         />
-        <span className="dropdown-label">Y</span>
+        <span className="dropdown-label">Y ({yDropdownLabel})</span>
         <ReactDropdown
           options={attributes['y']}
           value={yAttribute}
