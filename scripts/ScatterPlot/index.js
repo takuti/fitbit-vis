@@ -12,28 +12,32 @@ const margin = {
   top: 20,
   right: 20,
   bottom: 80,
-  left: 100,
+  left: 150,
 };
 const xAxisOffset = 60;
-const yAxisOffset = 50;
+const yAxisOffset = 100;
 
 const tickOffset = 16;
 
-const attributes = [
-  { value: 'asleep', label: 'Minutes Asleep' },
-  { value: 'awake', label: 'Minutes Awake' },
-  { value: 'awakenings', label: 'Number of Awakenings' },
-  { value: 'duration', label: 'Time in Bed' },
-  { value: 'steps', label: 'Steps' },
-  { value: 'calories', label: 'Calories Burned' },
-  { value: 'distance', label: 'Distance' },
-  { value: 'floors', label: 'Floors' },
-];
+const attributes = {
+  x: [
+    { value: 'asleep', label: 'Minutes Asleep' },
+    { value: 'awake', label: 'Minutes Awake' },
+    { value: 'awakenings', label: 'Number of Awakenings' },
+    { value: 'duration', label: 'Time in Bed' }
+  ],
+  y: [
+    { value: 'steps', label: 'Steps' },
+    { value: 'calories', label: 'Calories Burned' },
+    { value: 'distance', label: 'Distance' },
+    { value: 'floors', label: 'Floors' }
+  ]
+};
 
-const getLabel = (attribute) => {
-  for (let i = 0; i < attributes.length; i++) {
-    if (attributes[i].value === attribute) {
-      return attributes[i].label;
+const getLabel = (axis, attribute) => {
+  for (let i = 0; i < attributes[axis].length; i++) {
+    if (attributes[axis][i].value === attribute) {
+      return attributes[axis][i].label;
     }
   }
 };
@@ -48,14 +52,14 @@ export const ScatterPlot = ({
     initialXAttribute
   );
   const xValue = (d) => d[xAttribute];
-  const xAxisLabel = getLabel(xAttribute);
+  const xAxisLabel = getLabel('x', xAttribute);
 
-  const initialYAttribute = 'awake';
+  const initialYAttribute = 'steps';
   const [yAttribute, setYAttribute] = useState(
     initialYAttribute
   );
   const yValue = (d) => d[yAttribute];
-  const yAxisLabel = getLabel(yAttribute);
+  const yAxisLabel = getLabel('y', yAttribute);
 
   const circleRadius = 7;
 
@@ -77,13 +81,13 @@ export const ScatterPlot = ({
       <div className="menus-container">
         <span className="dropdown-label">X</span>
         <ReactDropdown
-          options={attributes}
+          options={attributes['x']}
           value={xAttribute}
           onChange={({ value }) => setXAttribute(value)}
         />
         <span className="dropdown-label">Y</span>
         <ReactDropdown
-          options={attributes}
+          options={attributes['y']}
           value={yAttribute}
           onChange={({ value }) => setYAttribute(value)}
         />

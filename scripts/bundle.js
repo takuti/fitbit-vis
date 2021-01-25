@@ -127,27 +127,32 @@
     top: 20,
     right: 20,
     bottom: 80,
-    left: 100,
+    left: 150,
   };
   var xAxisOffset = 60;
-  var yAxisOffset = 50;
+  var yAxisOffset = 100;
 
   var tickOffset = 16;
 
-  var attributes = [
-    { value: 'asleep', label: 'Minutes Asleep' },
-    { value: 'awake', label: 'Minutes Awake' },
-    { value: 'awakenings', label: 'Number of Awakenings' },
-    { value: 'duration', label: 'Time in Bed' },
-    { value: 'steps', label: 'Steps' },
-    { value: 'calories', label: 'Calories Burned' },
-    { value: 'distance', label: 'Distance' },
-    { value: 'floors', label: 'Floors' } ];
+  var attributes = {
+    x: [
+      { value: 'asleep', label: 'Minutes Asleep' },
+      { value: 'awake', label: 'Minutes Awake' },
+      { value: 'awakenings', label: 'Number of Awakenings' },
+      { value: 'duration', label: 'Time in Bed' }
+    ],
+    y: [
+      { value: 'steps', label: 'Steps' },
+      { value: 'calories', label: 'Calories Burned' },
+      { value: 'distance', label: 'Distance' },
+      { value: 'floors', label: 'Floors' }
+    ]
+  };
 
-  var getLabel = function (attribute) {
-    for (var i = 0; i < attributes.length; i++) {
-      if (attributes[i].value === attribute) {
-        return attributes[i].label;
+  var getLabel = function (axis, attribute) {
+    for (var i = 0; i < attributes[axis].length; i++) {
+      if (attributes[axis][i].value === attribute) {
+        return attributes[axis][i].label;
       }
     }
   };
@@ -164,16 +169,16 @@
     var xAttribute = ref$1[0];
     var setXAttribute = ref$1[1];
     var xValue = function (d) { return d[xAttribute]; };
-    var xAxisLabel = getLabel(xAttribute);
+    var xAxisLabel = getLabel('x', xAttribute);
 
-    var initialYAttribute = 'awake';
+    var initialYAttribute = 'steps';
     var ref$2 = React$1.useState(
       initialYAttribute
     );
     var yAttribute = ref$2[0];
     var setYAttribute = ref$2[1];
     var yValue = function (d) { return d[yAttribute]; };
-    var yAxisLabel = getLabel(yAttribute);
+    var yAxisLabel = getLabel('y', yAttribute);
 
     var circleRadius = 7;
 
@@ -195,14 +200,14 @@
         React__default['default'].createElement( 'div', { className: "menus-container" },
           React__default['default'].createElement( 'span', { className: "dropdown-label" }, "X"),
           React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes, value: xAttribute, onChange: function (ref) {
+            options: attributes['x'], value: xAttribute, onChange: function (ref) {
               var value = ref.value;
 
               return setXAttribute(value);
     } }),
           React__default['default'].createElement( 'span', { className: "dropdown-label" }, "Y"),
           React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes, value: yAttribute, onChange: function (ref) {
+            options: attributes['y'], value: yAttribute, onChange: function (ref) {
               var value = ref.value;
 
               return setYAttribute(value);
