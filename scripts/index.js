@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { useActivities } from './useActivities';
 import { useSleep } from './useSleep';
-import { BarChart } from './BarChart/index.js';
 import { ScatterPlot } from './ScatterPlot/index.js';
 
 const width = 960;
@@ -16,19 +15,28 @@ const App = () => {
     return <pre>Loading...</pre>;
   }
 
+  const data = new Map();
+  for (let i = 0; i < activities.length; i++) {
+    let e = data.get(activities[i].Date);
+    if (e) {
+      data.set(activities[i].Date, Object.assign(e, activities[i]));
+    } else {
+      data.set(activities[i].Date, activities[i]);
+    }
+
+    e = data.get(sleep[i].key);
+    if (e) {
+      data.set(sleep[i].key, Object.assign(e, sleep[i]));
+    } else {
+      data.set(sleep[i].key, sleep[i]);
+    }
+  }
   return (
-    <>
-     {/* <BarChart 
-      data={activities}
+    <ScatterPlot 
+      data={Array.from(data.values())}
       width={width}
-      height={height}
-     /> */}
-      <ScatterPlot 
-        data={sleep}
-        width={width}
-        height={height - 80}
-      />
-    </>
+      height={height - 80}
+    />
   );
 };
 

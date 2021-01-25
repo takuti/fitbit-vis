@@ -11,7 +11,10 @@
 
   var row = function (d) {
     d.dateTime = new Date(d.Date);
-    d.value = +d.Steps.replace(',', '');
+    d.steps = +d['Steps'].replace(',', '');
+    d.calories = +d['Calories Burned'].replace(',', '');
+    d.distance = +d['Distance'];
+    d.floors = +d['Floors'];
     return d;
   };
 
@@ -56,6 +59,7 @@
             e.duration += d.duration;
           } else {
             aggMap.set(d.key, {
+              key: d.key,
               date: d.date, 
               asleep: d.asleep, 
               awake: d.awake, 
@@ -70,8 +74,6 @@
 
     return data;
   };
-
-  var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
 
   var AxisBottom = function (ref) {
       var xScale = ref.xScale;
@@ -136,7 +138,11 @@
     { value: 'asleep', label: 'Minutes Asleep' },
     { value: 'awake', label: 'Minutes Awake' },
     { value: 'awakenings', label: 'Number of Awakenings' },
-    { value: 'duration', label: 'Time in Bed' } ];
+    { value: 'duration', label: 'Time in Bed' },
+    { value: 'steps', label: 'Steps' },
+    { value: 'calories', label: 'Calories Burned' },
+    { value: 'distance', label: 'Distance' },
+    { value: 'floors', label: 'Floors' } ];
 
   var getLabel = function (attribute) {
     for (var i = 0; i < attributes.length; i++) {
@@ -236,16 +242,25 @@
       return React__default['default'].createElement( 'pre', null, "Loading..." );
     }
 
+    var data = new Map();
+    for (var i = 0; i < activities.length; i++) {
+      var e = data.get(activities[i].Date);
+      if (e) {
+        data.set(activities[i].Date, Object.assign(e, activities[i]));
+      } else {
+        data.set(activities[i].Date, activities[i]);
+      }
+
+      e = data.get(sleep[i].key);
+      if (e) {
+        data.set(sleep[i].key, Object.assign(e, sleep[i]));
+      } else {
+        data.set(sleep[i].key, sleep[i]);
+      }
+    }
     return (
-      React__default['default'].createElement( React__default['default'].Fragment, null
-       /* <BarChart 
-        data={activities}
-        width={width}
-        height={height}
-       /> */,
-        React__default['default'].createElement( ScatterPlot, { 
-          data: sleep, width: width, height: height - 80 })
-      )
+      React__default['default'].createElement( ScatterPlot, { 
+        data: Array.from(data.values()), width: width, height: height - 80 })
     );
   };
 

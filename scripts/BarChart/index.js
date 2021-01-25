@@ -44,55 +44,57 @@ export const BarChart = ({
     .range([innerHeight, 0]);
 
   return (
-    <g
-      transform={`translate(${margin.left},${margin.top})`}
-    >
-      <text
-        className="chart-title"
-        x={innerWidth / 2}
-        y={-20}
-        textAnchor="middle"
+    <svg width={width} height={height}>
+      <g
+        transform={`translate(${margin.left},${margin.top})`}
       >
-        Fitbit Daily Steps
-      </text>
-      <AxisBottom
-        xScale={xScale}
-        innerHeight={innerHeight}
-        tickFormat={xAxisTickFormat}
-        tickOffset={5}
-        barWidth={barWidth}
-      />
-      <text
-        className="axis-label"
-        x={innerWidth / 2}
-        y={innerHeight + xAxisLabelOffset}
-        textAnchor="middle"
-      >
-        {xAxisLabel}
-      </text>
-      <AxisLeft
-        yScale={yScale}
-        innerWidth={innerWidth}
-        tickOffset={5}
-      />
-      <text
-        className="axis-label"
-        textAnchor="middle"
-        transform={`translate(${-yAxisLabelOffset},${
-          innerHeight / 2
-        }) rotate(-90)`}
-      >
-        {yAxisLabel}
-      </text>
-      <Marks
-        data={data}
-        xScale={xScale}
-        yScale={yScale}
-        xValue={xValue}
-        yValue={yValue}
-        innerHeight={innerHeight}
-        barWidth={barWidth}
-      />
-    </g>
+        <text
+          className="chart-title"
+          x={innerWidth / 2}
+          y={-20}
+          textAnchor="middle"
+        >
+          Fitbit Daily Steps
+        </text>
+        <AxisBottom
+          xScale={xScale}
+          innerHeight={innerHeight}
+          tickFormat={xAxisTickFormat}
+          tickOffset={5}
+          barWidth={barWidth}
+        />
+        <text
+          className="axis-label"
+          x={innerWidth / 2}
+          y={innerHeight + xAxisLabelOffset}
+          textAnchor="middle"
+        >
+          {xAxisLabel}
+        </text>
+        <AxisLeft
+          yScale={yScale}
+          innerWidth={innerWidth}
+          tickOffset={5}
+        />
+        <text
+          className="axis-label"
+          textAnchor="middle"
+          transform={`translate(${-yAxisLabelOffset},${
+            innerHeight / 2
+          }) rotate(-90)`}
+        >
+          {yAxisLabel}
+        </text>
+        <Marks
+          data={data}
+          xScale={xScale}
+          yScale={yScale}
+          xValue={xValue}
+          yValue={yValue}
+          innerHeight={innerHeight}
+          barWidth={barWidth}
+        />
+      </g>
+    </svg>
   );
 };

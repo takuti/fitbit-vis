@@ -31,6 +31,7 @@ export const useSleep = () => {
           e.duration += d.duration;
         } else {
           aggMap.set(d.key, {
+            key: d.key,
             date: d.date, 
             asleep: d.asleep, 
             awake: d.awake, 

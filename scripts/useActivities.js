@@ -8,7 +8,10 @@ const url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173
 
 const row = (d) => {
   d.dateTime = new Date(d.Date);
-  d.value = +d.Steps.replace(',', '');
+  d.steps = +d['Steps'].replace(',', '');
+  d.calories = +d['Calories Burned'].replace(',', '');
+  d.distance = +d['Distance'];
+  d.floors = +d['Floors'];
   return d;
 };
 

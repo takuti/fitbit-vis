@@ -24,6 +24,10 @@ const attributes = [
   { value: 'awake', label: 'Minutes Awake' },
   { value: 'awakenings', label: 'Number of Awakenings' },
   { value: 'duration', label: 'Time in Bed' },
+  { value: 'steps', label: 'Steps' },
+  { value: 'calories', label: 'Calories Burned' },
+  { value: 'distance', label: 'Distance' },
+  { value: 'floors', label: 'Floors' },
 ];
 
 const getLabel = (attribute) => {
