@@ -29,8 +29,12 @@
   var url$1 = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/sleep.csv';
 
   var row$1 = function (d) {
-    d.date = new Date(d['End Time'].substring(0, 10));  // YYYY-MM-DD
-    d.value = +d['Minutes Asleep'];
+    d.key = d['End Time'].substring(0, 10);  // YYYY-MM-DD
+    d.date = new Date(d.key);
+    d.asleep = +d['Minutes Asleep'];
+    d.awake = +d['Minutes Awake'];
+    d.awakenings = +d['Number of Awakenings'];
+    d.duration = +d['Time in Bed'];
     return d;
   };
 
@@ -40,7 +44,27 @@
     var setData = ref[1];
 
     React$1.useEffect(function () {
-      d3.csv(url$1, row$1).then(setData); 
+      d3.csv(url$1, row$1).then(function (data) {
+        var aggMap = new Map();
+        data.forEach(function (d) {
+          if (aggMap.has(d.key)) {
+            var e = aggMap.get(d.key);
+            e.asleep += d.asleep;
+            e.awake += d.awake;
+            e.awakenings += d.awakenings;
+            e.duration += d.duration;
+          } else {
+            aggMap.set(d.key, {
+              date: d.date, 
+              asleep: d.asleep, 
+              awake: d.awake, 
+              awakenings: d.awakenings, 
+              duration: d.duration
+            });
+          }
+        });
+        return setData(Array.from(aggMap.values()));
+      }); 
     }, []);
 
     return data;
