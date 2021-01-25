@@ -187,7 +187,7 @@
 
     var yScale = d3.scaleLinear()
       .domain(d3.extent(data, yValue))
-      .range([0, innerHeight])
+      .range([innerHeight, 0])
       .nice();
 
     return (

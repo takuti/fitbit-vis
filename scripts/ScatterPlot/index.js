@@ -69,7 +69,7 @@ export const ScatterPlot = ({
 
   const yScale = scaleLinear()
     .domain(extent(data, yValue))
-    .range([0, innerHeight])
+    .range([innerHeight, 0])
     .nice();
 
   return (
