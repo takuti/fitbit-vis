@@ -17,12 +17,12 @@ const margin = {
 
 const barWidth = 8;
 
-const xValue = (d) => d.dateTime;
+const xValue = (d) => d.date;
 const xAxisLabel = 'Date';
 const xAxisTickFormat = timeFormat('%m/%d/%Y');
 const xAxisLabelOffset = 100;
 
-const yValue = (d) => d.value;
+const yValue = (d) => d.steps;
 const yAxisLabel = 'Steps';
 const yAxisLabelOffset = 60;
 

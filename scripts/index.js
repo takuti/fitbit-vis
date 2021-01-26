@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { useActivities } from './useActivities';
 import { useSleep } from './useSleep';
+import { BarChart } from './BarChart/index.js'
 import { ScatterPlot } from './ScatterPlot/index.js';
 
 const width = 960;
@@ -32,11 +33,18 @@ const App = () => {
     }
   }
   return (
-    <ScatterPlot 
-      data={Array.from(data.values())}
-      width={width}
-      height={height - 80}
-    />
+    <>
+      <BarChart 
+        data={Array.from(data.values())}
+        width={width}
+        height={height}
+      />
+      <ScatterPlot 
+        data={Array.from(data.values())}
+        width={width}
+        height={height - 80}
+      />
+    </>
   );
 };
 
