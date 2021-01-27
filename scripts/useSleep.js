@@ -7,7 +7,7 @@ import { csv } from 'd3';
 const url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/sleep.csv';
 
 const row = (d) => {
-  d.key = d['End Time'].substring(0, 10);  // YYYY-MM-DD
+  d.key = d['Start Time'].substring(0, 10);  // YYYY-MM-DD
   d.date = new Date(d.key);
   d.asleep = +d['Minutes Asleep'];
   d.awake = +d['Minutes Awake'];

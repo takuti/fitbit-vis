@@ -33,7 +33,7 @@
   var url$1 = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/sleep.csv';
 
   var row$1 = function (d) {
-    d.key = d['End Time'].substring(0, 10);  // YYYY-MM-DD
+    d.key = d['Start Time'].substring(0, 10);  // YYYY-MM-DD
     d.date = new Date(d.key);
     d.asleep = +d['Minutes Asleep'];
     d.awake = +d['Minutes Awake'];
@@ -366,22 +366,24 @@
       return React__default['default'].createElement( 'pre', null, "Loading..." );
     }
 
-    var data = new Map();
+    var activitiesMap = new Map();
     for (var i = 0; i < activities.length; i++) {
-      var e = data.get(activities[i].Date);
-      if (e) {
-        data.set(activities[i].Date, Object.assign(e, activities[i]));
-      } else {
-        data.set(activities[i].Date, activities[i]);
-      }
-
-      e = data.get(sleep[i].key);
-      if (e) {
-        data.set(sleep[i].key, Object.assign(e, sleep[i]));
-      } else {
-        data.set(sleep[i].key, sleep[i]);
-      }
+      activitiesMap.set(activities[i].Date, activities[i]);
     }
+
+    var sleepMap = new Map();
+    for (var i$1 = 0; i$1 < sleep.length; i$1++) {
+      sleepMap.set(sleep[i$1].key, sleep[i$1]);
+    }
+
+    var data = new Map();
+    Array.from(activitiesMap.keys())
+      .filter(function (k) { return sleepMap.has(k); })
+      .forEach(function (k) {
+        data.set(k, activitiesMap.get(k));
+        data.set(k, Object.assign(data.get(k), sleepMap.get(k)));
+      });
+
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( BarChart, { 

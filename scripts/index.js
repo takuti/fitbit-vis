@@ -16,22 +16,24 @@ const App = () => {
     return <pre>Loading...</pre>;
   }
 
-  const data = new Map();
+  const activitiesMap = new Map();
   for (let i = 0; i < activities.length; i++) {
-    let e = data.get(activities[i].Date);
-    if (e) {
-      data.set(activities[i].Date, Object.assign(e, activities[i]));
-    } else {
-      data.set(activities[i].Date, activities[i]);
-    }
-
-    e = data.get(sleep[i].key);
-    if (e) {
-      data.set(sleep[i].key, Object.assign(e, sleep[i]));
-    } else {
-      data.set(sleep[i].key, sleep[i]);
-    }
+    activitiesMap.set(activities[i].Date, activities[i]);
   }
+
+  const sleepMap = new Map();
+  for (let i = 0; i < sleep.length; i++) {
+    sleepMap.set(sleep[i].key, sleep[i]);
+  }
+
+  const data = new Map();
+  Array.from(activitiesMap.keys())
+    .filter((k) => sleepMap.has(k))
+    .forEach((k) => {
+      data.set(k, activitiesMap.get(k));
+      data.set(k, Object.assign(data.get(k), sleepMap.get(k)));
+    });
+
   return (
     <>
       <BarChart 
