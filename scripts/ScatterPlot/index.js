@@ -50,7 +50,7 @@ export const ScatterPlot = ({
   );
   const yValue = (d) => d[yAttribute];
 
-  const circleRadius = 7;
+  const circleRadius = 4;
 
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
@@ -103,6 +103,7 @@ export const ScatterPlot = ({
             xValue={xValue}
             yValue={yValue}
             circleRadius={circleRadius}
+            opacity={0.7}
           />
         </g>
       </svg>

@@ -136,7 +136,7 @@
     ); });
   };
 
-  var barWidth = 8;
+  var barWidth = 2;
   var xAxisLabelOffset = 100;
   var yAxisLabelOffset = 75;
 
@@ -258,10 +258,11 @@
       var xValue = ref.xValue;
       var yValue = ref.yValue;
       var circleRadius = ref.circleRadius;
+      var opacity = ref.opacity;
 
       return data.map(function (d) { return (
       React.createElement( 'circle', {
-        className: "mark", cx: xScale(xValue(d)), cy: yScale(yValue(d)), r: circleRadius })
+        className: "mark", cx: xScale(xValue(d)), cy: yScale(yValue(d)), r: circleRadius, opacity: opacity })
     ); });
   };
 
@@ -311,7 +312,7 @@
     var setYAttribute = ref$2[1];
     var yValue = function (d) { return d[yAttribute]; };
 
-    var circleRadius = 7;
+    var circleRadius = 4;
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -350,7 +351,7 @@
             React__default['default'].createElement( AxisLeft$1, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: tickOffset }),
             React__default['default'].createElement( Marks$1, {
-              data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius })
+              data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.7 })
           )
         ),
         React__default['default'].createElement( 'div', { 

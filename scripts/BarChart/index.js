@@ -10,7 +10,7 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const barWidth = 8;
+const barWidth = 2;
 const xAxisLabelOffset = 100;
 const yAxisLabelOffset = 75;
 
