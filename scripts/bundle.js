@@ -137,21 +137,37 @@
   };
 
   var barWidth = 8;
-
-  var xValue = function (d) { return d.date; };
-  var xAxisLabel = 'Date';
-  var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
   var xAxisLabelOffset = 100;
+  var yAxisLabelOffset = 75;
 
-  var yValue = function (d) { return d.steps; };
-  var yAxisLabel = 'Steps';
-  var yAxisLabelOffset = 60;
+  var attributes = [
+    { value: 'steps', label: 'Steps' },
+    { value: 'calories', label: 'Calories Burned' },
+    { value: 'distance', label: 'Distance' },
+    { value: 'floors', label: 'Floors' },
+    { value: 'fairlyActive', label: 'Minutes Fairly Active' },
+    { value: 'lightlyActive', label: 'Minutes Lightly Active' },
+    { value: 'Sedentary', label: 'Minutes Sedentary' },
+    { value: 'veryActive', label: 'Minutes Very Active' }
+  ];
 
   var BarChart = function (ref) {
     var data = ref.data;
     var width = ref.width;
     var height = ref.height;
     var margin = ref.margin;
+
+    var xValue = function (d) { return d.date; };
+    var xAxisLabel = 'Date';
+    var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
+
+    var initialYAttribute = 'steps';
+    var ref$1 = React$1.useState(
+      initialYAttribute
+    );
+    var yAttribute = ref$1[0];
+    var setYAttribute = ref$1[1];
+    var yValue = function (d) { return d[yAttribute]; };
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -166,23 +182,35 @@
       .range([innerHeight, 0]);
 
     return (
-      React.createElement( 'svg', { width: width, height: height },
-        React.createElement( 'g', {
-          transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
-          React.createElement( AxisBottom, {
-            xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5, barWidth: barWidth }),
-          React.createElement( 'text', {
-            className: "axis-label", x: innerWidth / 2, y: innerHeight + xAxisLabelOffset, textAnchor: "middle" },
-            xAxisLabel
-          ),
-          React.createElement( AxisLeft, {
-            yScale: yScale, innerWidth: innerWidth, tickOffset: 5 }),
-          React.createElement( 'text', {
-            className: "axis-label", textAnchor: "middle", transform: ("translate(" + (-yAxisLabelOffset) + "," + (innerHeight / 2) + ") rotate(-90)") },
-            yAxisLabel
-          ),
-          React.createElement( Marks, {
-            data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, innerHeight: innerHeight, barWidth: barWidth })
+      React__default['default'].createElement( React__default['default'].Fragment, null,
+        React__default['default'].createElement( 'div', { 
+          className: "dropdown-container", style: { 
+            position: 'absolute',
+            left: -yAxisLabelOffset,
+            top: innerHeight * 4.5,
+            transform: 'rotate(-90deg)'
+          } },
+          React__default['default'].createElement( ReactDropdown__default['default'], {
+            options: attributes, value: yAttribute, onChange: function (ref) {
+              var value = ref.value;
+
+              return setYAttribute(value);
+    } })
+        ),
+        React__default['default'].createElement( 'svg', { width: width, height: height },
+          React__default['default'].createElement( 'g', {
+            transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
+            React__default['default'].createElement( AxisBottom, {
+              xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5, barWidth: barWidth }),
+            React__default['default'].createElement( 'text', {
+              className: "axis-label", x: innerWidth / 2, y: innerHeight + xAxisLabelOffset, textAnchor: "middle" },
+              xAxisLabel
+            ),
+            React__default['default'].createElement( AxisLeft, {
+              yScale: yScale, innerWidth: innerWidth, tickOffset: 5 }),
+            React__default['default'].createElement( Marks, {
+              data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, innerHeight: innerHeight, barWidth: barWidth })
+          )
         )
       )
     );
@@ -241,7 +269,7 @@
 
   var tickOffset = 16;
 
-  var attributes = {
+  var attributes$1 = {
     x: [
       { value: 'asleep', label: 'Minutes Asleep' },
       { value: 'awake', label: 'Minutes Awake' },
@@ -307,7 +335,7 @@
             transform: 'rotate(-90deg)'
           } },
           React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes['y'], value: yAttribute, onChange: function (ref) {
+            options: attributes$1['y'], value: yAttribute, onChange: function (ref) {
               var value = ref.value;
 
               return setYAttribute(value);
@@ -331,7 +359,7 @@
             top: innerHeight + xAxisOffset 
           } },
           React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes['x'], value: xAttribute, onChange: function (ref) {
+            options: attributes$1['x'], value: xAttribute, onChange: function (ref) {
               var value = ref.value;
 
               return setXAttribute(value);

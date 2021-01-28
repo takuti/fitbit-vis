@@ -1,23 +1,29 @@
+import React, { useState } from 'react';
 import {
   scaleLinear,
   max,
   timeFormat,
   scaleBand
 } from 'd3';
+import ReactDropdown from 'react-dropdown';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
 const barWidth = 8;
-
-const xValue = (d) => d.date;
-const xAxisLabel = 'Date';
-const xAxisTickFormat = timeFormat('%m/%d/%Y');
 const xAxisLabelOffset = 100;
+const yAxisLabelOffset = 75;
 
-const yValue = (d) => d.steps;
-const yAxisLabel = 'Steps';
-const yAxisLabelOffset = 60;
+const attributes = [
+  { value: 'steps', label: 'Steps' },
+  { value: 'calories', label: 'Calories Burned' },
+  { value: 'distance', label: 'Distance' },
+  { value: 'floors', label: 'Floors' },
+  { value: 'fairlyActive', label: 'Minutes Fairly Active' },
+  { value: 'lightlyActive', label: 'Minutes Lightly Active' },
+  { value: 'Sedentary', label: 'Minutes Sedentary' },
+  { value: 'veryActive', label: 'Minutes Very Active' }
+];
 
 export const BarChart = ({
   data,
@@ -25,6 +31,16 @@ export const BarChart = ({
   height,
   margin
 }) => {
+  const xValue = (d) => d.date;
+  const xAxisLabel = 'Date';
+  const xAxisTickFormat = timeFormat('%m/%d/%Y');
+
+  const initialYAttribute = 'steps';
+  const [yAttribute, setYAttribute] = useState(
+    initialYAttribute
+  );
+  const yValue = (d) => d[yAttribute];
+
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
 
@@ -38,49 +54,57 @@ export const BarChart = ({
     .range([innerHeight, 0]);
 
   return (
-    <svg width={width} height={height}>
-      <g
-        transform={`translate(${margin.left},${margin.top})`}
+    <>
+      <div 
+        className="dropdown-container"
+        style={{ 
+          position: 'absolute',
+          left: -yAxisLabelOffset,
+          top: innerHeight * 4.5,
+          transform: 'rotate(-90deg)'
+        }}
       >
-        <AxisBottom
-          xScale={xScale}
-          innerHeight={innerHeight}
-          tickFormat={xAxisTickFormat}
-          tickOffset={5}
-          barWidth={barWidth}
+        <ReactDropdown
+          options={attributes}
+          value={yAttribute}
+          onChange={({ value }) => setYAttribute(value)}
         />
-        <text
-          className="axis-label"
-          x={innerWidth / 2}
-          y={innerHeight + xAxisLabelOffset}
-          textAnchor="middle"
+      </div>
+      <svg width={width} height={height}>
+        <g
+          transform={`translate(${margin.left},${margin.top})`}
         >
-          {xAxisLabel}
-        </text>
-        <AxisLeft
-          yScale={yScale}
-          innerWidth={innerWidth}
-          tickOffset={5}
-        />
-        <text
-          className="axis-label"
-          textAnchor="middle"
-          transform={`translate(${-yAxisLabelOffset},${
-            innerHeight / 2
-          }) rotate(-90)`}
-        >
-          {yAxisLabel}
-        </text>
-        <Marks
-          data={data}
-          xScale={xScale}
-          yScale={yScale}
-          xValue={xValue}
-          yValue={yValue}
-          innerHeight={innerHeight}
-          barWidth={barWidth}
-        />
-      </g>
-    </svg>
+          <AxisBottom
+            xScale={xScale}
+            innerHeight={innerHeight}
+            tickFormat={xAxisTickFormat}
+            tickOffset={5}
+            barWidth={barWidth}
+          />
+          <text
+            className="axis-label"
+            x={innerWidth / 2}
+            y={innerHeight + xAxisLabelOffset}
+            textAnchor="middle"
+          >
+            {xAxisLabel}
+          </text>
+          <AxisLeft
+            yScale={yScale}
+            innerWidth={innerWidth}
+            tickOffset={5}
+          />
+          <Marks
+            data={data}
+            xScale={xScale}
+            yScale={yScale}
+            xValue={xValue}
+            yValue={yValue}
+            innerHeight={innerHeight}
+            barWidth={barWidth}
+          />
+        </g>
+      </svg>
+    </>
   );
 };
