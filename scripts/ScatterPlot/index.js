@@ -8,14 +8,8 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const margin = {
-  top: 20,
-  right: 20,
-  bottom: 80,
-  left: 150,
-};
-const xAxisOffset = 60;
-const yAxisOffset = 100;
+const xAxisOffset = 140;
+const yAxisOffset = 320;
 
 const tickOffset = 16;
 
@@ -38,34 +32,23 @@ const attributes = {
   ]
 };
 
-const xDropdownLabel = 'Sleep Metric';
-const yDropdownLabel = 'Activitiy Metric';
-const getLabel = (axis, attribute) => {
-  for (let i = 0; i < attributes[axis].length; i++) {
-    if (attributes[axis][i].value === attribute) {
-      return attributes[axis][i].label;
-    }
-  }
-};
-
 export const ScatterPlot = ({
   data,
   width,
-  height
+  height,
+  margin
 }) => {
   const initialXAttribute = 'asleep';
   const [xAttribute, setXAttribute] = useState(
     initialXAttribute
   );
   const xValue = (d) => d[xAttribute];
-  const xAxisLabel = getLabel('x', xAttribute);
 
   const initialYAttribute = 'steps';
   const [yAttribute, setYAttribute] = useState(
     initialYAttribute
   );
   const yValue = (d) => d[yAttribute];
-  const yAxisLabel = getLabel('y', yAttribute);
 
   const circleRadius = 7;
 
@@ -84,14 +67,15 @@ export const ScatterPlot = ({
 
   return (
     <>
-      <div className="menus-container">
-        <span className="dropdown-label">X ({xDropdownLabel}) </span>
-        <ReactDropdown
-          options={attributes['x']}
-          value={xAttribute}
-          onChange={({ value }) => setXAttribute(value)}
-        />
-        <span className="dropdown-label">Y ({yDropdownLabel})</span>
+      <div 
+        className="dropdown-container"
+        style={{ 
+          position: 'absolute',
+          left: -innerWidth / 2 + yAxisOffset,
+          top: innerHeight / 1.5,
+          transform: 'rotate(-90deg)'
+        }}
+      >
         <ReactDropdown
           options={attributes['y']}
           value={yAttribute}
@@ -107,28 +91,11 @@ export const ScatterPlot = ({
             innerHeight={innerHeight}
             tickOffset={tickOffset}
           />
-          <text
-            className="axis-label"
-            x={innerWidth / 2}
-            y={innerHeight + xAxisOffset}
-            textAnchor="middle"
-          >
-            {xAxisLabel}
-          </text>
           <AxisLeft
             yScale={yScale}
             innerWidth={innerWidth}
             tickOffset={tickOffset}
           />
-          <text
-            className="axis-label"
-            textAnchor="middle"
-            transform={`translate(${-yAxisOffset},${
-              innerHeight / 2
-            }) rotate(-90)`}
-          >
-            {yAxisLabel}
-          </text>
           <Marks
             data={data}
             xScale={xScale}
@@ -139,6 +106,20 @@ export const ScatterPlot = ({
           />
         </g>
       </svg>
+      <div 
+        className="dropdown-container"
+        style={{ 
+          position: 'absolute', 
+          left: innerWidth / 2, 
+          top: innerHeight + xAxisOffset 
+        }}
+      >
+        <ReactDropdown
+          options={attributes['x']}
+          value={xAttribute}
+          onChange={({ value }) => setXAttribute(value)}
+        />
+      </div>
     </>
   );
 };

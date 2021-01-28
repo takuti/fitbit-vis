@@ -8,13 +8,6 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const margin = {
-  top: 50,
-  right: 30,
-  bottom: 150,
-  left: 100,
-};
-
 const barWidth = 8;
 
 const xValue = (d) => d.date;
@@ -29,7 +22,8 @@ const yAxisLabelOffset = 60;
 export const BarChart = ({
   data,
   width,
-  height
+  height,
+  margin
 }) => {
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;

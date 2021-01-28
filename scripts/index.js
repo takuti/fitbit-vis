@@ -6,7 +6,13 @@ import { BarChart } from './BarChart/index.js'
 import { ScatterPlot } from './ScatterPlot/index.js';
 
 const width = 960;
-const height = 500;
+const height = 400;
+const margin = {
+  top: 20,
+  right: 20,
+  bottom: 120,
+  left: 150,
+};
 
 const App = () => {
   const activities = useActivities();
@@ -39,15 +45,17 @@ const App = () => {
       <h1 className="chart-title" align="center">
         Fitbit Activity/Sleep Correlation Explorer
       </h1>
-      <BarChart 
-        data={Array.from(data.values())}
-        width={width}
-        height={height}
-      />
       <ScatterPlot 
         data={Array.from(data.values())}
         width={width}
-        height={height - 80}
+        height={height}
+        margin={margin}
+      />
+      <BarChart 
+        data={Array.from(data.values())}
+        width={width}
+        height={height / 1.5}
+        margin={margin}
       />
     </>
   );

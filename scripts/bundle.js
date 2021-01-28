@@ -136,13 +136,6 @@
     ); });
   };
 
-  var margin = {
-    top: 50,
-    right: 30,
-    bottom: 150,
-    left: 100,
-  };
-
   var barWidth = 8;
 
   var xValue = function (d) { return d.date; };
@@ -158,6 +151,7 @@
     var data = ref.data;
     var width = ref.width;
     var height = ref.height;
+    var margin = ref.margin;
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -242,14 +236,8 @@
     ); });
   };
 
-  var margin$1 = {
-    top: 20,
-    right: 20,
-    bottom: 80,
-    left: 150,
-  };
-  var xAxisOffset = 60;
-  var yAxisOffset = 100;
+  var xAxisOffset = 140;
+  var yAxisOffset = 320;
 
   var tickOffset = 16;
 
@@ -272,20 +260,11 @@
     ]
   };
 
-  var xDropdownLabel = 'Sleep Metric';
-  var yDropdownLabel = 'Activitiy Metric';
-  var getLabel = function (axis, attribute) {
-    for (var i = 0; i < attributes[axis].length; i++) {
-      if (attributes[axis][i].value === attribute) {
-        return attributes[axis][i].label;
-      }
-    }
-  };
-
   var ScatterPlot = function (ref) {
     var data = ref.data;
     var width = ref.width;
     var height = ref.height;
+    var margin = ref.margin;
 
     var initialXAttribute = 'asleep';
     var ref$1 = React$1.useState(
@@ -294,7 +273,6 @@
     var xAttribute = ref$1[0];
     var setXAttribute = ref$1[1];
     var xValue = function (d) { return d[xAttribute]; };
-    var xAxisLabel = getLabel('x', xAttribute);
 
     var initialYAttribute = 'steps';
     var ref$2 = React$1.useState(
@@ -303,12 +281,11 @@
     var yAttribute = ref$2[0];
     var setYAttribute = ref$2[1];
     var yValue = function (d) { return d[yAttribute]; };
-    var yAxisLabel = getLabel('y', yAttribute);
 
     var circleRadius = 7;
 
-    var innerHeight = height - margin$1.top - margin$1.bottom;
-    var innerWidth = width - margin$1.right - margin$1.left;
+    var innerHeight = height - margin.top - margin.bottom;
+    var innerWidth = width - margin.right - margin.left;
 
     var xScale = d3.scaleLinear()
       .domain(d3.extent(data, xValue))
@@ -322,15 +299,13 @@
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
-        React__default['default'].createElement( 'div', { className: "menus-container" },
-          React__default['default'].createElement( 'span', { className: "dropdown-label" }, "X (", xDropdownLabel, ") "),
-          React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes['x'], value: xAttribute, onChange: function (ref) {
-              var value = ref.value;
-
-              return setXAttribute(value);
-    } }),
-          React__default['default'].createElement( 'span', { className: "dropdown-label" }, "Y (", yDropdownLabel, ")"),
+        React__default['default'].createElement( 'div', { 
+          className: "dropdown-container", style: { 
+            position: 'absolute',
+            left: -innerWidth / 2 + yAxisOffset,
+            top: innerHeight / 1.5,
+            transform: 'rotate(-90deg)'
+          } },
           React__default['default'].createElement( ReactDropdown__default['default'], {
             options: attributes['y'], value: yAttribute, onChange: function (ref) {
               var value = ref.value;
@@ -340,29 +315,40 @@
         ),
         React__default['default'].createElement( 'svg', { width: width, height: height },
           React__default['default'].createElement( 'g', {
-            transform: ("translate(" + (margin$1.left) + "," + (margin$1.top) + ")") },
+            transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
             React__default['default'].createElement( AxisBottom$1, {
               xScale: xScale, innerHeight: innerHeight, tickOffset: tickOffset }),
-            React__default['default'].createElement( 'text', {
-              className: "axis-label", x: innerWidth / 2, y: innerHeight + xAxisOffset, textAnchor: "middle" },
-              xAxisLabel
-            ),
             React__default['default'].createElement( AxisLeft$1, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: tickOffset }),
-            React__default['default'].createElement( 'text', {
-              className: "axis-label", textAnchor: "middle", transform: ("translate(" + (-yAxisOffset) + "," + (innerHeight / 2) + ") rotate(-90)") },
-              yAxisLabel
-            ),
             React__default['default'].createElement( Marks$1, {
               data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius })
           )
+        ),
+        React__default['default'].createElement( 'div', { 
+          className: "dropdown-container", style: { 
+            position: 'absolute', 
+            left: innerWidth / 2, 
+            top: innerHeight + xAxisOffset 
+          } },
+          React__default['default'].createElement( ReactDropdown__default['default'], {
+            options: attributes['x'], value: xAttribute, onChange: function (ref) {
+              var value = ref.value;
+
+              return setXAttribute(value);
+    } })
         )
       )
     );
   };
 
   var width = 960;
-  var height = 500;
+  var height = 400;
+  var margin = {
+    top: 20,
+    right: 20,
+    bottom: 120,
+    left: 150,
+  };
 
   var App = function () {
     var activities = useActivities();
@@ -393,10 +379,10 @@
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'h1', { className: "chart-title", align: "center" }, "Fitbit Activity/Sleep Correlation Explorer"),
-        React__default['default'].createElement( BarChart, { 
-          data: Array.from(data.values()), width: width, height: height }),
         React__default['default'].createElement( ScatterPlot, { 
-          data: Array.from(data.values()), width: width, height: height - 80 })
+          data: Array.from(data.values()), width: width, height: height, margin: margin }),
+        React__default['default'].createElement( BarChart, { 
+          data: Array.from(data.values()), width: width, height: height / 1.5, margin: margin })
       )
     );
   };
