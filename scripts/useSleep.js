@@ -4,7 +4,7 @@ import {
 } from 'react';
 import { csv } from 'd3';
 
-const url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/sleep.csv';
+const url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/sleep.csv';
 
 const row = (d) => {
   d.key = d['Start Time'].substring(0, 10);  // YYYY-MM-DD

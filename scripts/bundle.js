@@ -7,7 +7,7 @@
   var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
   var ReactDropdown__default = /*#__PURE__*/_interopDefaultLegacy(ReactDropdown);
 
-  var url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/activities.csv';
+  var url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/activities.csv';
 
   var row = function (d) {
     d.dateTime = new Date(d.Date);
@@ -34,7 +34,7 @@
     return data;
   };
 
-  var url$1 = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/9b272c7251e0320e9f77d8fd9f9ec14b79198c7f/sleep.csv';
+  var url$1 = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/sleep.csv';
 
   var row$1 = function (d) {
     d.key = d['Start Time'].substring(0, 10);  // YYYY-MM-DD
