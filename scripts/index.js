@@ -36,6 +36,9 @@ const App = () => {
 
   return (
     <>
+      <h1 className="chart-title" align="center">
+        Fitbit Activity/Sleep Correlation Explorer
+      </h1>
       <BarChart 
         data={Array.from(data.values())}
         width={width}

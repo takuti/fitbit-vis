@@ -175,8 +175,6 @@
       React.createElement( 'svg', { width: width, height: height },
         React.createElement( 'g', {
           transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
-          React.createElement( 'text', {
-            className: "chart-title", x: innerWidth / 2, y: -20, textAnchor: "middle" }, "Fitbit Daily Steps"),
           React.createElement( AxisBottom, {
             xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5, barWidth: barWidth }),
           React.createElement( 'text', {
@@ -394,6 +392,7 @@
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
+        React__default['default'].createElement( 'h1', { className: "chart-title", align: "center" }, "Fitbit Activity/Sleep Correlation Explorer"),
         React__default['default'].createElement( BarChart, { 
           data: Array.from(data.values()), width: width, height: height }),
         React__default['default'].createElement( ScatterPlot, { 

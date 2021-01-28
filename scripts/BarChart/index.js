@@ -48,14 +48,6 @@ export const BarChart = ({
       <g
         transform={`translate(${margin.left},${margin.top})`}
       >
-        <text
-          className="chart-title"
-          x={innerWidth / 2}
-          y={-20}
-          textAnchor="middle"
-        >
-          Fitbit Daily Steps
-        </text>
         <AxisBottom
           xScale={xScale}
           innerHeight={innerHeight}
