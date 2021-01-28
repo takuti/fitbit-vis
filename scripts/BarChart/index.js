@@ -51,7 +51,8 @@ export const BarChart = ({
 
   const yScale = scaleLinear()
     .domain([0, max(data, yValue)])
-    .range([innerHeight, 0]);
+    .range([innerHeight, 0])
+    .nice();
 
   return (
     <>

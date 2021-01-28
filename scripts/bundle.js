@@ -179,7 +179,8 @@
 
     var yScale = d3.scaleLinear()
       .domain([0, d3.max(data, yValue)])
-      .range([innerHeight, 0]);
+      .range([innerHeight, 0])
+      .nice();
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
