@@ -8,7 +8,7 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const xAxisOffset = 140;
+const xAxisOffset = 150;
 const yAxisOffset = 320;
 
 const tickOffset = 16;
@@ -72,7 +72,7 @@ export const ScatterPlot = ({
         style={{ 
           position: 'absolute',
           left: -innerWidth / 2 + yAxisOffset,
-          top: innerHeight / 1.5,
+          top: innerHeight / 1.3,
           transform: 'rotate(-90deg)'
         }}
       >

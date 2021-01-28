@@ -42,7 +42,7 @@ const App = () => {
 
   return (
     <>
-      <h1 className="chart-title" align="center">
+      <h1 className="chart-title">
         Fitbit Activity/Sleep Correlation Explorer
       </h1>
       <ScatterPlot 

@@ -265,7 +265,7 @@
     ); });
   };
 
-  var xAxisOffset = 140;
+  var xAxisOffset = 150;
   var yAxisOffset = 320;
 
   var tickOffset = 16;
@@ -332,7 +332,7 @@
           className: "dropdown-container", style: { 
             position: 'absolute',
             left: -innerWidth / 2 + yAxisOffset,
-            top: innerHeight / 1.5,
+            top: innerHeight / 1.3,
             transform: 'rotate(-90deg)'
           } },
           React__default['default'].createElement( ReactDropdown__default['default'], {
@@ -407,7 +407,7 @@
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
-        React__default['default'].createElement( 'h1', { className: "chart-title", align: "center" }, "Fitbit Activity/Sleep Correlation Explorer"),
+        React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Correlation Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
           data: Array.from(data.values()), width: width, height: height, margin: margin }),
         React__default['default'].createElement( BarChart, { 
