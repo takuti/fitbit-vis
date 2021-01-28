@@ -15,6 +15,10 @@
     d.calories = +d['Calories Burned'].replace(',', '');
     d.distance = +d['Distance'];
     d.floors = +d['Floors'];
+    d.fairlyActive = +d['Minutes Fairly Active'];
+    d.lightlyActive = +d['Minutes Lightly Active'];
+    d.Sedentary = +d['Minutes Sedentary'];
+    d.veryActive = +d['Minutes Very Active'];
     return d;
   };
 
@@ -262,7 +266,11 @@
       { value: 'steps', label: 'Steps' },
       { value: 'calories', label: 'Calories Burned' },
       { value: 'distance', label: 'Distance' },
-      { value: 'floors', label: 'Floors' }
+      { value: 'floors', label: 'Floors' },
+      { value: 'fairlyActive', label: 'Minutes Fairly Active' },
+      { value: 'lightlyActive', label: 'Minutes Lightly Active' },
+      { value: 'Sedentary', label: 'Minutes Sedentary' },
+      { value: 'veryActive', label: 'Minutes Very Active' }
     ]
   };
 

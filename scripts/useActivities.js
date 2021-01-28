@@ -12,6 +12,10 @@ const row = (d) => {
   d.calories = +d['Calories Burned'].replace(',', '');
   d.distance = +d['Distance'];
   d.floors = +d['Floors'];
+  d.fairlyActive = +d['Minutes Fairly Active'];
+  d.lightlyActive = +d['Minutes Lightly Active'];
+  d.Sedentary = +d['Minutes Sedentary'];
+  d.veryActive = +d['Minutes Very Active'];
   return d;
 };
 

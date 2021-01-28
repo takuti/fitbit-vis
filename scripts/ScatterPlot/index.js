@@ -30,7 +30,11 @@ const attributes = {
     { value: 'steps', label: 'Steps' },
     { value: 'calories', label: 'Calories Burned' },
     { value: 'distance', label: 'Distance' },
-    { value: 'floors', label: 'Floors' }
+    { value: 'floors', label: 'Floors' },
+    { value: 'fairlyActive', label: 'Minutes Fairly Active' },
+    { value: 'lightlyActive', label: 'Minutes Lightly Active' },
+    { value: 'Sedentary', label: 'Minutes Sedentary' },
+    { value: 'veryActive', label: 'Minutes Very Active' }
   ]
 };
 
