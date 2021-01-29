@@ -18,7 +18,10 @@ const attributes = {
     { value: 'asleep', label: 'Minutes Asleep' },
     { value: 'awake', label: 'Minutes Awake' },
     { value: 'awakenings', label: 'Number of Awakenings' },
-    { value: 'duration', label: 'Time in Bed' }
+    { value: 'duration', label: 'Time in Bed' },
+    { value: 'rem', label: 'Minutes REM Sleep' },
+    { value: 'light', label: 'Minutes Light Sleep' },
+    { value: 'deep', label: 'Minutes Deep Sleep' }
   ],
   y: [
     { value: 'steps', label: 'Steps' },

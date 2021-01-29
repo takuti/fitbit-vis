@@ -13,6 +13,9 @@ const row = (d) => {
   d.awake = +d['Minutes Awake'];
   d.awakenings = +d['Number of Awakenings'];
   d.duration = +d['Time in Bed'];
+  d.rem = +d['Minutes REM Sleep'];
+  d.light = +d['Minutes Light Sleep'];
+  d.deep = +d['Minutes Deep Sleep'];
   return d;
 };
 
@@ -29,6 +32,9 @@ export const useSleep = () => {
           e.awake += d.awake;
           e.awakenings += d.awakenings;
           e.duration += d.duration;
+          e.rem += d.rem;
+          e.light += d.light;
+          e.deep += d.light;
         } else {
           aggMap.set(d.key, {
             key: d.key,
@@ -36,7 +42,10 @@ export const useSleep = () => {
             asleep: d.asleep, 
             awake: d.awake, 
             awakenings: d.awakenings, 
-            duration: d.duration
+            duration: d.duration,
+            rem: d.rem,
+            light: d.light,
+            deep: d.deep
           });
         }
       });

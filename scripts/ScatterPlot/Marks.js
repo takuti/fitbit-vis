@@ -7,12 +7,13 @@ export const Marks = ({
   circleRadius,
   opacity
 }) =>
-  data.map(d => (
-    <circle
+  data.map(d => {
+    if (isNaN(xValue(d))) return;
+    return <circle
       className="mark"
       cx={xScale(xValue(d))}
       cy={yScale(yValue(d))}
       r={circleRadius}
       opacity={opacity}
-    />
-  ));
+    />;
+  });

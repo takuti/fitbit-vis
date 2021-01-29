@@ -43,6 +43,9 @@
     d.awake = +d['Minutes Awake'];
     d.awakenings = +d['Number of Awakenings'];
     d.duration = +d['Time in Bed'];
+    d.rem = +d['Minutes REM Sleep'];
+    d.light = +d['Minutes Light Sleep'];
+    d.deep = +d['Minutes Deep Sleep'];
     return d;
   };
 
@@ -61,6 +64,9 @@
             e.awake += d.awake;
             e.awakenings += d.awakenings;
             e.duration += d.duration;
+            e.rem += d.rem;
+            e.light += d.light;
+            e.deep += d.light;
           } else {
             aggMap.set(d.key, {
               key: d.key,
@@ -68,7 +74,10 @@
               asleep: d.asleep, 
               awake: d.awake, 
               awakenings: d.awakenings, 
-              duration: d.duration
+              duration: d.duration,
+              rem: d.rem,
+              light: d.light,
+              deep: d.deep
             });
           }
         });
@@ -260,10 +269,11 @@
       var circleRadius = ref.circleRadius;
       var opacity = ref.opacity;
 
-      return data.map(function (d) { return (
-      React.createElement( 'circle', {
-        className: "mark", cx: xScale(xValue(d)), cy: yScale(yValue(d)), r: circleRadius, opacity: opacity })
-    ); });
+      return data.map(function (d) {
+      if (isNaN(xValue(d))) { return; }
+      return React.createElement( 'circle', {
+        className: "mark", cx: xScale(xValue(d)), cy: yScale(yValue(d)), r: circleRadius, opacity: opacity });
+    });
   };
 
   var xAxisOffset = 150;
@@ -276,7 +286,10 @@
       { value: 'asleep', label: 'Minutes Asleep' },
       { value: 'awake', label: 'Minutes Awake' },
       { value: 'awakenings', label: 'Number of Awakenings' },
-      { value: 'duration', label: 'Time in Bed' }
+      { value: 'duration', label: 'Time in Bed' },
+      { value: 'rem', label: 'Minutes REM Sleep' },
+      { value: 'light', label: 'Minutes Light Sleep' },
+      { value: 'deep', label: 'Minutes Deep Sleep' }
     ],
     y: [
       { value: 'steps', label: 'Steps' },
