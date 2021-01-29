@@ -95,21 +95,18 @@
       var tickOffset = ref.tickOffset;
       var barWidth = ref.barWidth;
 
-      return xScale.domain().map(function (tickValue) {
-      var tickBaseX = xScale(tickValue) + xScale.bandwidth() / 2;
-      var tickBaseY = innerHeight + tickOffset;
-      return (
-        React.createElement( 'g', {
-          className: "tick", transform: ("translate(" + (xScale(tickValue)) + ",0)") },
-          React.createElement( 'line', { 
-            x1: barWidth / 2, x2: barWidth / 2, y2: innerHeight }),
-          React.createElement( 'text', { 
-            style: { textAnchor: 'end' }, x: tickBaseX, y: tickBaseY, transform: ("translate(\n            -" + innerHeight + ",\n            " + (tickBaseX + tickBaseY) + "\n          ) rotate(-90)") },
-            tickFormat(tickValue)
-          )
+      return xScale.ticks().map(function (tickValue) { return (
+      React.createElement( 'g', {
+        className: "tick", transform: ("translate(" + (xScale(tickValue)) + ",0)") },
+        React.createElement( 'line', { 
+          x1: barWidth / 2, x2: barWidth / 2, y2: innerHeight }),
+        React.createElement( 'text', { 
+          style: { textAnchor: 'end' }, y: innerHeight + tickOffset, transform: ("translate(\n          -" + innerHeight + ",\n          " + (innerHeight + tickOffset) + "\n        ) rotate(-90)") },
+          tickFormat(tickValue)
         )
-      );
-    });
+      )
+    ); }
+  );
   };
 
   var AxisLeft = function (ref) {
@@ -181,10 +178,10 @@
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
 
-    var xScale = d3.scaleBand()
-      .domain(data.map(xValue))
+    var xScale = d3.scaleTime()
+      .domain(d3.extent(data, xValue))
       .range([0, innerWidth])
-      .paddingInner(0.15);
+      .nice();
 
     var yScale = d3.scaleLinear()
       .domain([0, d3.max(data, yValue)])

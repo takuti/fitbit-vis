@@ -3,7 +3,8 @@ import {
   scaleLinear,
   max,
   timeFormat,
-  scaleBand
+  scaleTime,
+  extent
 } from 'd3';
 import ReactDropdown from 'react-dropdown';
 import { AxisBottom } from './AxisBottom';
@@ -44,10 +45,10 @@ export const BarChart = ({
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
 
-  const xScale = scaleBand()
-    .domain(data.map(xValue))
+  const xScale = scaleTime()
+    .domain(extent(data, xValue))
     .range([0, innerWidth])
-    .paddingInner(0.15);
+    .nice();
 
   const yScale = scaleLinear()
     .domain([0, max(data, yValue)])
