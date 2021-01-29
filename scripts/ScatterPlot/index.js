@@ -22,7 +22,7 @@ const attributes = {
   ],
   y: [
     { value: 'steps', label: 'Steps' },
-    { value: 'calories', label: 'Calories Burned' },
+    { value: 'calories', label: 'Activity Calories' },
     { value: 'distance', label: 'Distance' },
     { value: 'floors', label: 'Floors' },
     { value: 'fairlyActive', label: 'Minutes Fairly Active' },

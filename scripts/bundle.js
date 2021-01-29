@@ -12,7 +12,7 @@
   var row = function (d) {
     d.dateTime = new Date(d.Date);
     d.steps = +d['Steps'].replace(',', '');
-    d.calories = +d['Calories Burned'].replace(',', '');
+    d.calories = +d['Activity Calories'].replace(',', '');
     d.distance = +d['Distance'];
     d.floors = +d['Floors'];
     d.fairlyActive = +d['Minutes Fairly Active'];
@@ -280,7 +280,7 @@
     ],
     y: [
       { value: 'steps', label: 'Steps' },
-      { value: 'calories', label: 'Calories Burned' },
+      { value: 'calories', label: 'Activity Calories' },
       { value: 'distance', label: 'Distance' },
       { value: 'floors', label: 'Floors' },
       { value: 'fairlyActive', label: 'Minutes Fairly Active' },
