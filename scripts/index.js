@@ -50,7 +50,7 @@ const App = () => {
   return (
     <>
       <h1 className="chart-title">
-        Fitbit Activity/Sleep Correlation Explorer
+        Fitbit Activity/Sleep Explorer
       </h1>
       <ScatterPlot 
         data={Array.from(data.values())}

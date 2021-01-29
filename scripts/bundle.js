@@ -397,7 +397,7 @@
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
-        React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Correlation Explorer"),
+        React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
           data: Array.from(data.values()), width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
         React__default['default'].createElement( BarChart, { 
