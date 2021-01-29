@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   scaleLinear,
   max,
   timeFormat,
   scaleTime,
-  extent
+  extent,
+  histogram as bin,
+  timeWeeks,
+  sum
 } from 'd3';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const barWidth = 2;
 const xAxisLabelOffset = 100;
 
 export const BarChart = ({
@@ -32,8 +34,21 @@ export const BarChart = ({
     .range([0, innerWidth])
     .nice();
 
+  const binnedData = useMemo(() => {
+    const [start, stop] = xScale.domain();
+    return bin()
+      .value(xValue)
+      .domain(xScale.domain())
+      .thresholds(timeWeeks(start, stop))(data)
+      .map((array) => ({
+        y: sum(array, yValue),
+        x0: array.x0,
+        x1: array.x1,
+      }));
+  }, [xValue, xScale, data, yValue]);
+
   const yScale = scaleLinear()
-    .domain([0, max(data, yValue)])
+    .domain([0, max(binnedData, (d) => d.y)])
     .range([innerHeight, 0])
     .nice();
 
@@ -48,7 +63,6 @@ export const BarChart = ({
             innerHeight={innerHeight}
             tickFormat={xAxisTickFormat}
             tickOffset={5}
-            barWidth={barWidth}
           />
           <text
             className="axis-label"
@@ -64,13 +78,10 @@ export const BarChart = ({
             tickOffset={5}
           />
           <Marks
-            data={data}
+            data={binnedData}
             xScale={xScale}
             yScale={yScale}
-            xValue={xValue}
-            yValue={yValue}
             innerHeight={innerHeight}
-            barWidth={barWidth}
           />
         </g>
       </svg>

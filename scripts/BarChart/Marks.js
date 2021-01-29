@@ -2,19 +2,16 @@ export const Marks = ({
   data,
   xScale,
   yScale,
-  xValue,
-  yValue,
   innerHeight,
-  barWidth
 }) =>
   data.map(d => (
     <rect
       className="mark"
-      x={xScale(xValue(d))}
-      y={yScale(yValue(d))}
-      width={barWidth}
-      height={innerHeight - yScale(yValue(d))}
+      x={xScale(d.x0)}
+      y={yScale(d.y)}
+      width={xScale(d.x1) - xScale(d.x0)}
+      height={innerHeight - yScale(d.y)}
     >
-      <title>{yValue(d)}</title>
+      <title>{d.y}</title>
     </rect>
   ));

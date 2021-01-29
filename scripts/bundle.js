@@ -93,13 +93,10 @@
       var innerHeight = ref.innerHeight;
       var tickFormat = ref.tickFormat;
       var tickOffset = ref.tickOffset;
-      var barWidth = ref.barWidth;
 
       return xScale.ticks().map(function (tickValue) { return (
       React.createElement( 'g', {
         className: "tick", transform: ("translate(" + (xScale(tickValue)) + ",0)") },
-        React.createElement( 'line', { 
-          x1: barWidth / 2, x2: barWidth / 2, y2: innerHeight }),
         React.createElement( 'text', { 
           style: { textAnchor: 'end' }, y: innerHeight + tickOffset, transform: ("translate(\n          -" + innerHeight + ",\n          " + (innerHeight + tickOffset) + "\n        ) rotate(-90)") },
           tickFormat(tickValue)
@@ -129,20 +126,16 @@
       var data = ref.data;
       var xScale = ref.xScale;
       var yScale = ref.yScale;
-      var xValue = ref.xValue;
-      var yValue = ref.yValue;
       var innerHeight = ref.innerHeight;
-      var barWidth = ref.barWidth;
 
       return data.map(function (d) { return (
       React.createElement( 'rect', {
-        className: "mark", x: xScale(xValue(d)), y: yScale(yValue(d)), width: barWidth, height: innerHeight - yScale(yValue(d)) },
-        React.createElement( 'title', null, yValue(d) )
+        className: "mark", x: xScale(d.x0), y: yScale(d.y), width: xScale(d.x1) - xScale(d.x0), height: innerHeight - yScale(d.y) },
+        React.createElement( 'title', null, d.y )
       )
     ); });
   };
 
-  var barWidth = 2;
   var xAxisLabelOffset = 100;
 
   var BarChart = function (ref) {
@@ -164,8 +157,23 @@
       .range([0, innerWidth])
       .nice();
 
+    var binnedData = React$1.useMemo(function () {
+      var ref = xScale.domain();
+      var start = ref[0];
+      var stop = ref[1];
+      return d3.histogram()
+        .value(xValue)
+        .domain(xScale.domain())
+        .thresholds(d3.timeWeeks(start, stop))(data)
+        .map(function (array) { return ({
+          y: d3.sum(array, yValue),
+          x0: array.x0,
+          x1: array.x1,
+        }); });
+    }, [xValue, xScale, data, yValue]);
+
     var yScale = d3.scaleLinear()
-      .domain([0, d3.max(data, yValue)])
+      .domain([0, d3.max(binnedData, function (d) { return d.y; })])
       .range([innerHeight, 0])
       .nice();
 
@@ -175,7 +183,7 @@
           React__default['default'].createElement( 'g', {
             transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
             React__default['default'].createElement( AxisBottom, {
-              xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5, barWidth: barWidth }),
+              xScale: xScale, innerHeight: innerHeight, tickFormat: xAxisTickFormat, tickOffset: 5 }),
             React__default['default'].createElement( 'text', {
               className: "axis-label", x: innerWidth / 2, y: innerHeight + xAxisLabelOffset, textAnchor: "middle" },
               xAxisLabel
@@ -183,7 +191,7 @@
             React__default['default'].createElement( AxisLeft, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: 5 }),
             React__default['default'].createElement( Marks, {
-              data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, innerHeight: innerHeight, barWidth: barWidth })
+              data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight })
           )
         )
       )
