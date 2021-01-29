@@ -14,7 +14,7 @@ const row = (d) => {
   d.floors = +d['Floors'];
   d.fairlyActive = +d['Minutes Fairly Active'];
   d.lightlyActive = +d['Minutes Lightly Active'];
-  d.Sedentary = +d['Minutes Sedentary'];
+  d.Sedentary = +d['Minutes Sedentary'].replace(',', '');
   d.veryActive = +d['Minutes Very Active'];
   return d;
 };
