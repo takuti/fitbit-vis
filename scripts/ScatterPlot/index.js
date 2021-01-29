@@ -39,19 +39,16 @@ export const ScatterPlot = ({
   data,
   width,
   height,
-  margin
+  margin,
+  yValue,
+  yAttribute,
+  setYAttribute
 }) => {
   const initialXAttribute = 'asleep';
   const [xAttribute, setXAttribute] = useState(
     initialXAttribute
   );
   const xValue = (d) => d[xAttribute];
-
-  const initialYAttribute = 'steps';
-  const [yAttribute, setYAttribute] = useState(
-    initialYAttribute
-  );
-  const yValue = (d) => d[yAttribute];
 
   const circleRadius = 4;
 
@@ -106,7 +103,7 @@ export const ScatterPlot = ({
             xValue={xValue}
             yValue={yValue}
             circleRadius={circleRadius}
-            opacity={0.7}
+            opacity={0.5}
           />
         </g>
       </svg>

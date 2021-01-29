@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useActivities } from './useActivities';
 import { useSleep } from './useSleep';
@@ -17,6 +17,13 @@ const margin = {
 const App = () => {
   const activities = useActivities();
   const sleep = useSleep();
+
+  const initialYAttribute = 'steps';
+  const [yAttribute, setYAttribute] = useState(
+    initialYAttribute
+  );
+  const yValue = (d) => d[yAttribute];
+
 
   if (!activities || !sleep) {
     return <pre>Loading...</pre>;
@@ -50,12 +57,16 @@ const App = () => {
         width={width}
         height={height}
         margin={margin}
+        yValue={yValue}
+        yAttribute={yAttribute}
+        setYAttribute={setYAttribute}
       />
       <BarChart 
         data={Array.from(data.values())}
         width={width}
         height={height / 1.5}
         margin={margin}
+        yValue={yValue}
       />
     </>
   );

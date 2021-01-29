@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   scaleLinear,
   max,
@@ -6,41 +6,23 @@ import {
   scaleTime,
   extent
 } from 'd3';
-import ReactDropdown from 'react-dropdown';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
 const barWidth = 2;
 const xAxisLabelOffset = 100;
-const yAxisLabelOffset = 75;
-
-const attributes = [
-  { value: 'steps', label: 'Steps' },
-  { value: 'calories', label: 'Calories Burned' },
-  { value: 'distance', label: 'Distance' },
-  { value: 'floors', label: 'Floors' },
-  { value: 'fairlyActive', label: 'Minutes Fairly Active' },
-  { value: 'lightlyActive', label: 'Minutes Lightly Active' },
-  { value: 'Sedentary', label: 'Minutes Sedentary' },
-  { value: 'veryActive', label: 'Minutes Very Active' }
-];
 
 export const BarChart = ({
   data,
   width,
   height,
-  margin
+  margin,
+  yValue,
 }) => {
   const xValue = (d) => d.date;
   const xAxisLabel = 'Date';
   const xAxisTickFormat = timeFormat('%m/%d/%Y');
-
-  const initialYAttribute = 'steps';
-  const [yAttribute, setYAttribute] = useState(
-    initialYAttribute
-  );
-  const yValue = (d) => d[yAttribute];
 
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
@@ -57,21 +39,6 @@ export const BarChart = ({
 
   return (
     <>
-      <div 
-        className="dropdown-container"
-        style={{ 
-          position: 'absolute',
-          left: -yAxisLabelOffset,
-          top: innerHeight * 4.5,
-          transform: 'rotate(-90deg)'
-        }}
-      >
-        <ReactDropdown
-          options={attributes}
-          value={yAttribute}
-          onChange={({ value }) => setYAttribute(value)}
-        />
-      </div>
       <svg width={width} height={height}>
         <g
           transform={`translate(${margin.left},${margin.top})`}

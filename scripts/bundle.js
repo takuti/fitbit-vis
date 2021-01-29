@@ -144,36 +144,17 @@
 
   var barWidth = 2;
   var xAxisLabelOffset = 100;
-  var yAxisLabelOffset = 75;
-
-  var attributes = [
-    { value: 'steps', label: 'Steps' },
-    { value: 'calories', label: 'Calories Burned' },
-    { value: 'distance', label: 'Distance' },
-    { value: 'floors', label: 'Floors' },
-    { value: 'fairlyActive', label: 'Minutes Fairly Active' },
-    { value: 'lightlyActive', label: 'Minutes Lightly Active' },
-    { value: 'Sedentary', label: 'Minutes Sedentary' },
-    { value: 'veryActive', label: 'Minutes Very Active' }
-  ];
 
   var BarChart = function (ref) {
     var data = ref.data;
     var width = ref.width;
     var height = ref.height;
     var margin = ref.margin;
+    var yValue = ref.yValue;
 
     var xValue = function (d) { return d.date; };
     var xAxisLabel = 'Date';
     var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
-
-    var initialYAttribute = 'steps';
-    var ref$1 = React$1.useState(
-      initialYAttribute
-    );
-    var yAttribute = ref$1[0];
-    var setYAttribute = ref$1[1];
-    var yValue = function (d) { return d[yAttribute]; };
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -190,20 +171,6 @@
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
-        React__default['default'].createElement( 'div', { 
-          className: "dropdown-container", style: { 
-            position: 'absolute',
-            left: -yAxisLabelOffset,
-            top: innerHeight * 4.5,
-            transform: 'rotate(-90deg)'
-          } },
-          React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes, value: yAttribute, onChange: function (ref) {
-              var value = ref.value;
-
-              return setYAttribute(value);
-    } })
-        ),
         React__default['default'].createElement( 'svg', { width: width, height: height },
           React__default['default'].createElement( 'g', {
             transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
@@ -278,7 +245,7 @@
 
   var tickOffset = 16;
 
-  var attributes$1 = {
+  var attributes = {
     x: [
       { value: 'asleep', label: 'Minutes Asleep' },
       { value: 'awake', label: 'Minutes Awake' },
@@ -305,6 +272,9 @@
     var width = ref.width;
     var height = ref.height;
     var margin = ref.margin;
+    var yValue = ref.yValue;
+    var yAttribute = ref.yAttribute;
+    var setYAttribute = ref.setYAttribute;
 
     var initialXAttribute = 'asleep';
     var ref$1 = React$1.useState(
@@ -313,14 +283,6 @@
     var xAttribute = ref$1[0];
     var setXAttribute = ref$1[1];
     var xValue = function (d) { return d[xAttribute]; };
-
-    var initialYAttribute = 'steps';
-    var ref$2 = React$1.useState(
-      initialYAttribute
-    );
-    var yAttribute = ref$2[0];
-    var setYAttribute = ref$2[1];
-    var yValue = function (d) { return d[yAttribute]; };
 
     var circleRadius = 4;
 
@@ -347,7 +309,7 @@
             transform: 'rotate(-90deg)'
           } },
           React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes$1['y'], value: yAttribute, onChange: function (ref) {
+            options: attributes['y'], value: yAttribute, onChange: function (ref) {
               var value = ref.value;
 
               return setYAttribute(value);
@@ -361,7 +323,7 @@
             React__default['default'].createElement( AxisLeft$1, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: tickOffset }),
             React__default['default'].createElement( Marks$1, {
-              data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.7 })
+              data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5 })
           )
         ),
         React__default['default'].createElement( 'div', { 
@@ -371,7 +333,7 @@
             top: innerHeight + xAxisOffset 
           } },
           React__default['default'].createElement( ReactDropdown__default['default'], {
-            options: attributes$1['x'], value: xAttribute, onChange: function (ref) {
+            options: attributes['x'], value: xAttribute, onChange: function (ref) {
               var value = ref.value;
 
               return setXAttribute(value);
@@ -393,6 +355,15 @@
   var App = function () {
     var activities = useActivities();
     var sleep = useSleep();
+
+    var initialYAttribute = 'steps';
+    var ref = React$1.useState(
+      initialYAttribute
+    );
+    var yAttribute = ref[0];
+    var setYAttribute = ref[1];
+    var yValue = function (d) { return d[yAttribute]; };
+
 
     if (!activities || !sleep) {
       return React__default['default'].createElement( 'pre', null, "Loading..." );
@@ -420,9 +391,9 @@
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Correlation Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
-          data: Array.from(data.values()), width: width, height: height, margin: margin }),
+          data: Array.from(data.values()), width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
         React__default['default'].createElement( BarChart, { 
-          data: Array.from(data.values()), width: width, height: height / 1.5, margin: margin })
+          data: Array.from(data.values()), width: width, height: height / 1.5, margin: margin, yValue: yValue })
       )
     );
   };
