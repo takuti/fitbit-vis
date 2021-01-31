@@ -153,10 +153,13 @@
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
 
-    var xScale = d3.scaleTime()
-      .domain(d3.extent(data, xValue))
-      .range([0, innerWidth])
-      .nice();
+    var xScale = React$1.useMemo(
+      function () { return d3.scaleTime()
+          .domain(d3.extent(data, xValue))
+          .range([0, innerWidth])
+          .nice(); },
+      [data, xValue, innerWidth]
+    );
 
     var binnedData = React$1.useMemo(function () {
       var ref = xScale.domain();
@@ -173,10 +176,13 @@
         }); });
     }, [xValue, xScale, data, yValue]);
 
-    var yScale = d3.scaleLinear()
-      .domain([0, d3.max(binnedData, function (d) { return d.y; })])
-      .range([innerHeight, 0])
-      .nice();
+    var yScale = React$1.useMemo(
+      function () { return d3.scaleLinear()
+        .domain([0, d3.max(binnedData, function (d) { return d.y; })])
+        .range([innerHeight, 0])
+        .nice(); },
+      [binnedData, innerHeight]
+    );
 
     var brushRef = React$1.useRef();
     React$1.useEffect(function () {
@@ -313,15 +319,21 @@
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
 
-    var xScale = d3.scaleLinear()
-      .domain(d3.extent(data, xValue))
-      .range([0, innerWidth])
-      .nice();
+    var xScale = React$1.useMemo(
+      function () { return d3.scaleLinear()
+        .domain(d3.extent(data, xValue))
+        .range([0, innerWidth])
+        .nice(); },
+      [data, xValue, innerWidth]
+    );
 
-    var yScale = d3.scaleLinear()
-      .domain(d3.extent(data, yValue))
-      .range([innerHeight, 0])
-      .nice();
+    var yScale = React$1.useMemo(
+      function () { return d3.scaleLinear()
+        .domain(d3.extent(data, yValue))
+        .range([innerHeight, 0])
+        .nice(); },
+      [data, yValue, innerHeight]
+    );
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,

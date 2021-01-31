@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   scaleLinear,
   extent,
@@ -55,15 +55,23 @@ export const ScatterPlot = ({
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
 
-  const xScale = scaleLinear()
-    .domain(extent(data, xValue))
-    .range([0, innerWidth])
-    .nice();
+  const xScale = useMemo(
+    () =>
+      scaleLinear()
+      .domain(extent(data, xValue))
+      .range([0, innerWidth])
+      .nice(),
+    [data, xValue, innerWidth]
+  );
 
-  const yScale = scaleLinear()
-    .domain(extent(data, yValue))
-    .range([innerHeight, 0])
-    .nice();
+  const yScale = useMemo(
+    () =>
+      scaleLinear()
+      .domain(extent(data, yValue))
+      .range([innerHeight, 0])
+      .nice(),
+    [data, yValue, innerHeight]
+  );
 
   return (
     <>

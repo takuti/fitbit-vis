@@ -33,10 +33,14 @@ export const BarChart = ({
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
 
-  const xScale = scaleTime()
-    .domain(extent(data, xValue))
-    .range([0, innerWidth])
-    .nice();
+  const xScale = useMemo(
+    () =>
+      scaleTime()
+        .domain(extent(data, xValue))
+        .range([0, innerWidth])
+        .nice(),
+    [data, xValue, innerWidth]
+  );
 
   const binnedData = useMemo(() => {
     const [start, stop] = xScale.domain();
@@ -51,10 +55,14 @@ export const BarChart = ({
       }));
   }, [xValue, xScale, data, yValue]);
 
-  const yScale = scaleLinear()
-    .domain([0, max(binnedData, (d) => d.y)])
-    .range([innerHeight, 0])
-    .nice();
+  const yScale = useMemo(
+    () =>
+      scaleLinear()
+      .domain([0, max(binnedData, (d) => d.y)])
+      .range([innerHeight, 0])
+      .nice(),
+    [binnedData, innerHeight]
+  );
 
   const brushRef = useRef();
   useEffect(() => {
