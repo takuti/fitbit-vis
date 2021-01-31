@@ -7,87 +7,6 @@
   var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
   var ReactDropdown__default = /*#__PURE__*/_interopDefaultLegacy(ReactDropdown);
 
-  var url = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/activities.csv';
-
-  var row = function (d) {
-    d.dateTime = new Date(d.Date);
-    d.steps = +d['Steps'].replace(',', '');
-    d.calories = +d['Activity Calories'].replace(',', '');
-    d.distance = +d['Distance'];
-    d.floors = +d['Floors'];
-    d.fairlyActive = +d['Minutes Fairly Active'];
-    d.lightlyActive = +d['Minutes Lightly Active'];
-    d.Sedentary = +d['Minutes Sedentary'].replace(',', '');
-    d.veryActive = +d['Minutes Very Active'];
-    return d;
-  };
-
-  var useActivities = function () {
-    var ref = React$1.useState(null);
-    var data = ref[0];
-    var setData = ref[1];
-
-    React$1.useEffect(function () {
-      d3.csv(url, row).then(setData); 
-    }, []);
-
-    return data;
-  };
-
-  var url$1 = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/sleep.csv';
-
-  var row$1 = function (d) {
-    d.key = d['Start Time'].substring(0, 10);  // YYYY-MM-DD
-    d.date = new Date(d.key);
-    d.asleep = +d['Minutes Asleep'];
-    d.awake = +d['Minutes Awake'];
-    d.awakenings = +d['Number of Awakenings'];
-    d.duration = +d['Time in Bed'];
-    d.rem = +d['Minutes REM Sleep'];
-    d.light = +d['Minutes Light Sleep'];
-    d.deep = +d['Minutes Deep Sleep'];
-    return d;
-  };
-
-  var useSleep = function () {
-    var ref = React$1.useState(null);
-    var data = ref[0];
-    var setData = ref[1];
-
-    React$1.useEffect(function () {
-      d3.csv(url$1, row$1).then(function (data) {
-        var aggMap = new Map();
-        data.forEach(function (d) {
-          if (aggMap.has(d.key)) {
-            var e = aggMap.get(d.key);
-            e.asleep += d.asleep;
-            e.awake += d.awake;
-            e.awakenings += d.awakenings;
-            e.duration += d.duration;
-            e.rem += d.rem;
-            e.light += d.light;
-            e.deep += d.light;
-          } else {
-            aggMap.set(d.key, {
-              key: d.key,
-              date: d.date, 
-              asleep: d.asleep, 
-              awake: d.awake, 
-              awakenings: d.awakenings, 
-              duration: d.duration,
-              rem: d.rem,
-              light: d.light,
-              deep: d.deep
-            });
-          }
-        });
-        return setData(Array.from(aggMap.values()));
-      }); 
-    }, []);
-
-    return data;
-  };
-
   var AxisBottom = function (ref) {
       var xScale = ref.xScale;
       var innerHeight = ref.innerHeight;
@@ -380,6 +299,99 @@
     );
   };
 
+  var activitiesUrl = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/activities.csv';
+  var parseActivitiesRow = function (d) {
+    d.dateTime = new Date(d.Date);
+    d.steps = +d['Steps'].replace(',', '');
+    d.calories = +d['Activity Calories'].replace(',', '');
+    d.distance = +d['Distance'];
+    d.floors = +d['Floors'];
+    d.fairlyActive = +d['Minutes Fairly Active'];
+    d.lightlyActive = +d['Minutes Lightly Active'];
+    d.Sedentary = +d['Minutes Sedentary'].replace(',', '');
+    d.veryActive = +d['Minutes Very Active'];
+    return d;
+  };
+
+  var sleepUrl = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/sleep.csv';
+  var parseSleepRow = function (d) {
+    d.key = d['Start Time'].substring(0, 10);  // YYYY-MM-DD
+    d.date = new Date(d.key);
+    d.asleep = +d['Minutes Asleep'];
+    d.awake = +d['Minutes Awake'];
+    d.awakenings = +d['Number of Awakenings'];
+    d.duration = +d['Time in Bed'];
+    d.rem = +d['Minutes REM Sleep'];
+    d.light = +d['Minutes Light Sleep'];
+    d.deep = +d['Minutes Deep Sleep'];
+    return d;
+  };
+
+  var useData = function () {
+    var ref = React$1.useState();
+    var data = ref[0];
+    var setData = ref[1];
+
+    React$1.useEffect(function () {
+      Promise.all([
+        d3.csv(activitiesUrl, parseActivitiesRow),
+        d3.csv(sleepUrl, parseSleepRow)
+      ]).then(function (ref) {
+        var activities = ref[0];
+        var sleep = ref[1];
+
+        var aggMap = new Map();
+        sleep.forEach(function (d) {
+          if (aggMap.has(d.key)) {
+            var e = aggMap.get(d.key);
+            e.asleep += d.asleep;
+            e.awake += d.awake;
+            e.awakenings += d.awakenings;
+            e.duration += d.duration;
+            e.rem += d.rem;
+            e.light += d.light;
+            e.deep += d.light;
+          } else {
+            aggMap.set(d.key, {
+              key: d.key,
+              date: d.date, 
+              asleep: d.asleep, 
+              awake: d.awake, 
+              awakenings: d.awakenings, 
+              duration: d.duration,
+              rem: d.rem,
+              light: d.light,
+              deep: d.deep
+            });
+          }
+        });
+        var sleepArray = Array.from(aggMap.values());
+
+        var activitiesMap = new Map();
+        for (var i = 0; i < activities.length; i++) {
+          activitiesMap.set(activities[i].Date, activities[i]);
+        }
+
+        var sleepMap = new Map();
+        for (var i$1 = 0; i$1 < sleepArray.length; i$1++) {
+          sleepMap.set(sleepArray[i$1].key, sleepArray[i$1]);
+        }
+
+        var data = new Map();
+        Array.from(activitiesMap.keys())
+          .filter(function (k) { return sleepMap.has(k); })
+          .forEach(function (k) {
+            data.set(k, activitiesMap.get(k));
+            data.set(k, Object.assign(data.get(k), sleepMap.get(k)));
+          });
+
+        setData(Array.from(data.values()));
+      });
+    }, []);
+
+    return data;
+  };
+
   var width = 960;
   var height = 400;
   var margin = {
@@ -391,8 +403,7 @@
   var xValue = function (d) { return d.date; };
 
   var App = function () {
-    var activities = useActivities();
-    var sleep = useSleep();
+    var data = useData();
     var ref = React$1.useState();
     var brushExtent = ref[0];
     var setBrushExtent = ref[1];
@@ -405,45 +416,26 @@
     var setYAttribute = ref$1[1];
     var yValue = function (d) { return d[yAttribute]; };
 
-    if (!activities || !sleep) {
+    if (!data) {
       return React__default['default'].createElement( 'pre', null, "Loading..." );
     }
 
-    var activitiesMap = new Map();
-    for (var i = 0; i < activities.length; i++) {
-      activitiesMap.set(activities[i].Date, activities[i]);
-    }
-
-    var sleepMap = new Map();
-    for (var i$1 = 0; i$1 < sleep.length; i$1++) {
-      sleepMap.set(sleep[i$1].key, sleep[i$1]);
-    }
-
-    var data = new Map();
-    Array.from(activitiesMap.keys())
-      .filter(function (k) { return sleepMap.has(k); })
-      .forEach(function (k) {
-        data.set(k, activitiesMap.get(k));
-        data.set(k, Object.assign(data.get(k), sleepMap.get(k)));
-      });
-
-    var dataArray = Array.from(data.values());
     var filteredData = brushExtent
-      ? dataArray.filter(function (d) {
+      ? data.filter(function (d) {
           var date = xValue(d);
           return (
             brushExtent[0] < date && date < brushExtent[1]
           );
         })
-      : dataArray;
+      : data;
 
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
-          data: dataArray, filteredData: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
+          data: data, filteredData: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
         React__default['default'].createElement( BarChart, { 
-          data: dataArray, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent })
+          data: data, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent })
       )
     );
   };
