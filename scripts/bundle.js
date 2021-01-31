@@ -299,6 +299,7 @@
 
   var ScatterPlot = function (ref) {
     var data = ref.data;
+    var filteredData = ref.filteredData;
     var width = ref.width;
     var height = ref.height;
     var margin = ref.margin;
@@ -359,7 +360,7 @@
             React__default['default'].createElement( AxisLeft$1, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: tickOffset }),
             React__default['default'].createElement( Marks$1, {
-              data: data, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5 })
+              data: filteredData, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5 })
           )
         ),
         React__default['default'].createElement( 'div', { 
@@ -440,7 +441,7 @@
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
-          data: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
+          data: dataArray, filteredData: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
         React__default['default'].createElement( BarChart, { 
           data: dataArray, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent })
       )

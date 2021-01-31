@@ -64,7 +64,8 @@ const App = () => {
         Fitbit Activity/Sleep Explorer
       </h1>
       <ScatterPlot 
-        data={filteredData}
+        data={dataArray}
+        filteredData={filteredData}
         width={width}
         height={height}
         margin={margin}

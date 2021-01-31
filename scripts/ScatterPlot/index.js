@@ -37,6 +37,7 @@ const attributes = {
 
 export const ScatterPlot = ({
   data,
+  filteredData,
   width,
   height,
   margin,
@@ -105,7 +106,7 @@ export const ScatterPlot = ({
             tickOffset={tickOffset}
           />
           <Marks
-            data={data}
+            data={filteredData}
             xScale={xScale}
             yScale={yScale}
             xValue={xValue}
