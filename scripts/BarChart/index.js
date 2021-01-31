@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import {
   scaleLinear,
   max,
@@ -7,7 +7,10 @@ import {
   extent,
   histogram as bin,
   timeWeeks,
-  sum
+  sum,
+  event,
+  brushX,
+  select
 } from 'd3';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
@@ -20,9 +23,10 @@ export const BarChart = ({
   width,
   height,
   margin,
+  xValue,
   yValue,
+  setBrushExtent
 }) => {
-  const xValue = (d) => d.date;
   const xAxisLabel = 'Date';
   const xAxisTickFormat = timeFormat('%m/%d/%Y');
 
@@ -51,6 +55,21 @@ export const BarChart = ({
     .domain([0, max(binnedData, (d) => d.y)])
     .range([innerHeight, 0])
     .nice();
+
+  const brushRef = useRef();
+  useEffect(() => {
+    const brush = brushX().extent([
+      [0, 0],
+      [innerWidth, innerHeight],
+    ]);
+    brush(select(brushRef.current));
+    brush.on('brush end', () => {
+      setBrushExtent(
+        event.selection &&
+          event.selection.map(xScale.invert)
+      );
+    });
+  });
 
   return (
     <>
@@ -83,6 +102,7 @@ export const BarChart = ({
             yScale={yScale}
             innerHeight={innerHeight}
           />
+          <g ref={brushRef}></g>
         </g>
       </svg>
     </>

@@ -143,9 +143,10 @@
     var width = ref.width;
     var height = ref.height;
     var margin = ref.margin;
+    var xValue = ref.xValue;
     var yValue = ref.yValue;
+    var setBrushExtent = ref.setBrushExtent;
 
-    var xValue = function (d) { return d.date; };
     var xAxisLabel = 'Date';
     var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
 
@@ -177,6 +178,20 @@
       .range([innerHeight, 0])
       .nice();
 
+    var brushRef = React$1.useRef();
+    React$1.useEffect(function () {
+      var brush = d3.brushX().extent([
+        [0, 0],
+        [innerWidth, innerHeight] ]);
+      brush(d3.select(brushRef.current));
+      brush.on('brush end', function () {
+        setBrushExtent(
+          d3.event.selection &&
+            d3.event.selection.map(xScale.invert)
+        );
+      });
+    });
+
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'svg', { width: width, height: height },
@@ -191,7 +206,8 @@
             React__default['default'].createElement( AxisLeft, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: 5 }),
             React__default['default'].createElement( Marks, {
-              data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight })
+              data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight }),
+            React__default['default'].createElement( 'g', { ref: brushRef })
           )
         )
       )
@@ -359,19 +375,22 @@
     bottom: 120,
     left: 150,
   };
+  var xValue = function (d) { return d.date; };
 
   var App = function () {
     var activities = useActivities();
     var sleep = useSleep();
+    var ref = React$1.useState();
+    var brushExtent = ref[0];
+    var setBrushExtent = ref[1];
 
     var initialYAttribute = 'steps';
-    var ref = React$1.useState(
+    var ref$1 = React$1.useState(
       initialYAttribute
     );
-    var yAttribute = ref[0];
-    var setYAttribute = ref[1];
+    var yAttribute = ref$1[0];
+    var setYAttribute = ref$1[1];
     var yValue = function (d) { return d[yAttribute]; };
-
 
     if (!activities || !sleep) {
       return React__default['default'].createElement( 'pre', null, "Loading..." );
@@ -395,13 +414,23 @@
         data.set(k, Object.assign(data.get(k), sleepMap.get(k)));
       });
 
+    var dataArray = Array.from(data.values());
+    var filteredData = brushExtent
+      ? dataArray.filter(function (d) {
+          var date = xValue(d);
+          return (
+            brushExtent[0] < date && date < brushExtent[1]
+          );
+        })
+      : dataArray;
+
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
-          data: Array.from(data.values()), width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
+          data: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
         React__default['default'].createElement( BarChart, { 
-          data: Array.from(data.values()), width: width, height: height / 1.5, margin: margin, yValue: yValue })
+          data: dataArray, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent })
       )
     );
   };
