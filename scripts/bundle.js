@@ -55,6 +55,8 @@
     ); });
   };
 
+  var xAxisLabel = 'Date';
+  var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
   var xAxisLabelOffset = 100;
 
   var BarChart = function (ref) {
@@ -65,9 +67,6 @@
     var xValue = ref.xValue;
     var yValue = ref.yValue;
     var setBrushExtent = ref.setBrushExtent;
-
-    var xAxisLabel = 'Date';
-    var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -216,6 +215,8 @@
     ]
   };
 
+  var circleRadius = 4;
+
   var ScatterPlot = function (ref) {
     var data = ref.data;
     var filteredData = ref.filteredData;
@@ -233,8 +234,6 @@
     var xAttribute = ref$1[0];
     var setXAttribute = ref$1[1];
     var xValue = function (d) { return d[xAttribute]; };
-
-    var circleRadius = 4;
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;

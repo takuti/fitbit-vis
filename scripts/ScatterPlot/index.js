@@ -35,6 +35,8 @@ const attributes = {
   ]
 };
 
+const circleRadius = 4;
+
 export const ScatterPlot = ({
   data,
   filteredData,
@@ -50,8 +52,6 @@ export const ScatterPlot = ({
     initialXAttribute
   );
   const xValue = (d) => d[xAttribute];
-
-  const circleRadius = 4;
 
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;

@@ -16,6 +16,8 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
+const xAxisLabel = 'Date';
+const xAxisTickFormat = timeFormat('%m/%d/%Y');
 const xAxisLabelOffset = 100;
 
 export const BarChart = ({
@@ -27,9 +29,6 @@ export const BarChart = ({
   yValue,
   setBrushExtent
 }) => {
-  const xAxisLabel = 'Date';
-  const xAxisTickFormat = timeFormat('%m/%d/%Y');
-
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
 
