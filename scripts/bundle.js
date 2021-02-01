@@ -198,10 +198,33 @@
     });
   };
 
+  var ColorLegend = function (ref) {
+      var colorScale = ref.colorScale;
+      var tickSpacing = ref.tickSpacing; if ( tickSpacing === void 0 ) tickSpacing = 30;
+      var tickSize = ref.tickSize; if ( tickSize === void 0 ) tickSize = 10;
+      var tickTextOffset = ref.tickTextOffset; if ( tickTextOffset === void 0 ) tickTextOffset = 20;
+      var onHover = ref.onHover;
+      var hoveredValue = ref.hoveredValue;
+      var fadeOpacity = ref.fadeOpacity;
+
+      return colorScale.domain().map(function (domainValue, i) { return (
+      React.createElement( 'g', {
+        className: "tick", transform: ("translate(0," + (i * tickSpacing) + ")"), onMouseEnter: function () { return onHover(domainValue); }, onMouseOut: function () { return onHover(null); }, opacity: hoveredValue && domainValue !== hoveredValue
+            ? fadeOpacity
+            : 1.0 },
+        React.createElement( 'circle', { fill: colorScale(domainValue), r: tickSize }),
+        React.createElement( 'text', { x: tickTextOffset, dy: ".32em" },
+          domainValue
+        )
+      )
+    ); });
+  };
+
   var xAxisOffset = 150;
   var yAxisOffset = 320;
 
   var tickOffset = 16;
+  var fadeOpacity = 0.2;
 
   var attributes = {
     x: [
@@ -265,6 +288,18 @@
       [data, yValue, innerHeight]
     );
 
+    var ref$2 = React$1.useState(null);
+    var hoveredValue = ref$2[0];
+    var setHoveredValue = ref$2[1];
+    var colorValue = function (d) { return (d.date <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID'; };
+    var colorLegendLabel = 'Timing';
+    var colorScale = d3.scaleOrdinal()
+      .domain(data.map(colorValue))
+      .range(['rgba(196, 91, 161, 0.973)', '#137B80']);
+    var filteredDataByColor = filteredData.filter(
+      function (d) { return colorValue(d) === hoveredValue; }
+    );
+
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'div', { 
@@ -282,14 +317,26 @@
     } })
         ),
         React__default['default'].createElement( 'svg', { width: width, height: height },
+          React__default['default'].createElement( 'g', { transform: ("translate(" + (innerWidth + 50) + ",60)") },
+            React__default['default'].createElement( 'text', {
+              x: 50, y: -30, className: "axis-label", textAnchor: "middle" },
+              colorLegendLabel
+            ),
+            React__default['default'].createElement( ColorLegend, {
+              colorScale: colorScale, tickSpacing: 30, tickSize: circleRadius, tickTextOffset: 20, onHover: setHoveredValue, hoveredValue: hoveredValue, fadeOpacity: fadeOpacity })
+          ),
           React__default['default'].createElement( 'g', {
             transform: ("translate(" + (margin.left) + "," + (margin.top) + ")") },
             React__default['default'].createElement( AxisBottom$1, {
               xScale: xScale, innerHeight: innerHeight, tickOffset: tickOffset }),
             React__default['default'].createElement( AxisLeft$1, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: tickOffset }),
+            React__default['default'].createElement( 'g', { opacity: hoveredValue ? fadeOpacity : 1.0 },
+              React__default['default'].createElement( Marks$1, {
+                data: filteredData, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5, colorThresholdDate: colorThresholdDate })
+            ),
             React__default['default'].createElement( Marks$1, {
-              data: filteredData, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5, colorThresholdDate: colorThresholdDate })
+              data: filteredDataByColor, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5, colorThresholdDate: colorThresholdDate })
           )
         ),
         React__default['default'].createElement( 'div', { 

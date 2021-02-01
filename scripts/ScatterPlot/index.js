@@ -1,17 +1,20 @@
 import React, { useState, useMemo } from 'react';
 import {
   scaleLinear,
+  scaleOrdinal,
   extent,
 } from 'd3';
 import ReactDropdown from 'react-dropdown';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
+import { ColorLegend } from './ColorLegend';
 
 const xAxisOffset = 150;
 const yAxisOffset = 320;
 
 const tickOffset = 16;
+const fadeOpacity = 0.2;
 
 const attributes = {
   x: [
@@ -75,6 +78,16 @@ export const ScatterPlot = ({
     [data, yValue, innerHeight]
   );
 
+  const [hoveredValue, setHoveredValue] = useState(null);
+  const colorValue = (d) => (d.date <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID';
+  const colorLegendLabel = 'Timing';
+  const colorScale = scaleOrdinal()
+    .domain(data.map(colorValue))
+    .range(['rgba(196, 91, 161, 0.973)', '#137B80']);
+  const filteredDataByColor = filteredData.filter(
+    (d) => colorValue(d) === hoveredValue
+  );
+
   return (
     <>
       <div 
@@ -93,6 +106,25 @@ export const ScatterPlot = ({
         />
       </div>
       <svg width={width} height={height}>
+        <g transform={`translate(${innerWidth + 50},60)`}>
+          <text
+            x={50}
+            y={-30}
+            className="axis-label"
+            textAnchor="middle"
+          >
+            {colorLegendLabel}
+          </text>
+          <ColorLegend
+            colorScale={colorScale}
+            tickSpacing={30}
+            tickSize={circleRadius}
+            tickTextOffset={20}
+            onHover={setHoveredValue}
+            hoveredValue={hoveredValue}
+            fadeOpacity={fadeOpacity}
+          />
+        </g>
         <g
           transform={`translate(${margin.left},${margin.top})`}
         >
@@ -106,8 +138,20 @@ export const ScatterPlot = ({
             innerWidth={innerWidth}
             tickOffset={tickOffset}
           />
+          <g opacity={hoveredValue ? fadeOpacity : 1.0}>
+            <Marks
+              data={filteredData}
+              xScale={xScale}
+              yScale={yScale}
+              xValue={xValue}
+              yValue={yValue}
+              circleRadius={circleRadius}
+              opacity={0.5}
+              colorThresholdDate={colorThresholdDate}
+            />
+          </g>
           <Marks
-            data={filteredData}
+            data={filteredDataByColor}
             xScale={xScale}
             yScale={yScale}
             xValue={xValue}
