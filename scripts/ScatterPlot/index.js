@@ -30,7 +30,7 @@ const attributes = {
     { value: 'floors', label: 'Floors' },
     { value: 'fairlyActive', label: 'Minutes Fairly Active' },
     { value: 'lightlyActive', label: 'Minutes Lightly Active' },
-    { value: 'Sedentary', label: 'Minutes Sedentary' },
+    { value: 'sedentary', label: 'Minutes Sedentary' },
     { value: 'veryActive', label: 'Minutes Very Active' }
   ]
 };

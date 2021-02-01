@@ -211,7 +211,7 @@
       { value: 'floors', label: 'Floors' },
       { value: 'fairlyActive', label: 'Minutes Fairly Active' },
       { value: 'lightlyActive', label: 'Minutes Lightly Active' },
-      { value: 'Sedentary', label: 'Minutes Sedentary' },
+      { value: 'sedentary', label: 'Minutes Sedentary' },
       { value: 'veryActive', label: 'Minutes Very Active' }
     ]
   };
@@ -300,31 +300,55 @@
   };
 
   var activitiesUrl = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/activities.csv';
-  var parseActivitiesRow = function (d) {
-    d.dateTime = new Date(d.Date);
-    d.steps = +d['Steps'].replace(',', '');
-    d.calories = +d['Activity Calories'].replace(',', '');
-    d.distance = +d['Distance'];
-    d.floors = +d['Floors'];
-    d.fairlyActive = +d['Minutes Fairly Active'];
-    d.lightlyActive = +d['Minutes Lightly Active'];
-    d.Sedentary = +d['Minutes Sedentary'].replace(',', '');
-    d.veryActive = +d['Minutes Very Active'];
-    return d;
-  };
+  var parseActivitiesRow = function (d) { return ({
+    key: d.Date, // YYYY-MM-DD
+    date: new Date(d.Date),
+    steps: +d['Steps'].replace(',', ''),
+    calories: +d['Activity Calories'].replace(',', ''),
+    distance: +d['Distance'],
+    floors: +d['Floors'],
+    fairlyActive: +d['Minutes Fairly Active'],
+    lightlyActive: +d['Minutes Lightly Active'],
+    sedentary: +d['Minutes Sedentary'].replace(',', ''),
+    veryActive: +d['Minutes Very Active'],
+  }); };
 
   var sleepUrl = 'https://gist.githubusercontent.com/takuti/f7adf1c14de7c6ec8f1502173efb38d7/raw/53367f6725a48f8ccfa63cddd71a5f9c9c0a5a3b/sleep.csv';
   var parseSleepRow = function (d) {
-    d.key = d['Start Time'].substring(0, 10);  // YYYY-MM-DD
-    d.date = new Date(d.key);
-    d.asleep = +d['Minutes Asleep'];
-    d.awake = +d['Minutes Awake'];
-    d.awakenings = +d['Number of Awakenings'];
-    d.duration = +d['Time in Bed'];
-    d.rem = +d['Minutes REM Sleep'];
-    d.light = +d['Minutes Light Sleep'];
-    d.deep = +d['Minutes Deep Sleep'];
-    return d;
+    var dateStr = d['Start Time'].substring(0, 10); // YYYY-MM-DD
+    return {
+      key: dateStr,
+      date: new Date(dateStr),
+      asleep: +d['Minutes Asleep'],
+      awake: +d['Minutes Awake'],
+      awakenings: +d['Number of Awakenings'],
+      duration: +d['Time in Bed'],
+      rem: +d['Minutes REM Sleep'],
+      light: +d['Minutes Light Sleep'],
+      deep: +d['Minutes Deep Sleep'],
+    };
+  };
+
+  // https://stackoverflow.com/questions/17500312/is-there-some-way-i-can-join-the-contents-of-two-javascript-arrays-much-like-i/17500836#17500836
+  var innerJoin = function (t1, t2, key1, key2, selectFunc) {
+    var lookup = t1.reduce(function (lookup, row1) { return lookup.set(row1[key1], row1); }, new Map);
+    return t2
+      .filter(function (row2) { return lookup.get(row2[key2]); })
+      .map(function (row2) { return selectFunc(lookup.get(row2[key2]), row2); });
+  };
+
+  // aggregate array of hash over a certain key
+  var aggregate = function (t, key, aggFunc) {
+    var aggMap = t.reduce(
+      function (aggMap, row) { return aggMap.set(
+          row[key], 
+          aggMap.has(row[key]) 
+            ? aggFunc(row, aggMap.get(row[key])) 
+            : row
+        ); },
+      new Map
+    );
+    return Array.from(aggMap.values());
   };
 
   var useData = function () {
@@ -340,52 +364,46 @@
         var activities = ref[0];
         var sleep = ref[1];
 
-        var aggMap = new Map();
-        sleep.forEach(function (d) {
-          if (aggMap.has(d.key)) {
-            var e = aggMap.get(d.key);
-            e.asleep += d.asleep;
-            e.awake += d.awake;
-            e.awakenings += d.awakenings;
-            e.duration += d.duration;
-            e.rem += d.rem;
-            e.light += d.light;
-            e.deep += d.light;
-          } else {
-            aggMap.set(d.key, {
-              key: d.key,
-              date: d.date, 
-              asleep: d.asleep, 
-              awake: d.awake, 
-              awakenings: d.awakenings, 
-              duration: d.duration,
-              rem: d.rem,
-              light: d.light,
-              deep: d.deep
-            });
-          }
-        });
-        var sleepArray = Array.from(aggMap.values());
+        var sleeps = aggregate(sleep, 'key', function (row, ref) { return ({
+          key: row.key,
+          date: row.date, 
+          asleep: row.asleep + ref.asleep, 
+          awake: row.awake + ref.awake, 
+          awakenings: row.awakenings + ref.awakenings, 
+          duration: row.duration + ref.duration,
+          rem: row.rem + ref.rem,
+          light: row.light + ref.light,
+          deep: row.deep + ref.deep
+        }); });
+        
+        var data = innerJoin(activities, sleeps, 'key', 'key', function (
+            ref, 
+            ref$1
+          ) {
+            var date = ref.date;
+            var steps = ref.steps;
+            var calories = ref.calories;
+            var distance = ref.distance;
+            var floors = ref.floors;
+            var fairlyActive = ref.fairlyActive;
+            var lightlyActive = ref.lightlyActive;
+            var sedentary = ref.sedentary;
+            var veryActive = ref.veryActive;
+            var asleep = ref$1.asleep;
+            var awake = ref$1.awake;
+            var awakenings = ref$1.awakenings;
+            var duration = ref$1.duration;
+            var rem = ref$1.rem;
+            var light = ref$1.light;
+            var deep = ref$1.deep;
 
-        var activitiesMap = new Map();
-        for (var i = 0; i < activities.length; i++) {
-          activitiesMap.set(activities[i].Date, activities[i]);
-        }
-
-        var sleepMap = new Map();
-        for (var i$1 = 0; i$1 < sleepArray.length; i$1++) {
-          sleepMap.set(sleepArray[i$1].key, sleepArray[i$1]);
-        }
-
-        var data = new Map();
-        Array.from(activitiesMap.keys())
-          .filter(function (k) { return sleepMap.has(k); })
-          .forEach(function (k) {
-            data.set(k, activitiesMap.get(k));
-            data.set(k, Object.assign(data.get(k), sleepMap.get(k)));
+            return ({
+            date: date, steps: steps, calories: calories, distance: distance, floors: floors, fairlyActive: fairlyActive, lightlyActive: lightlyActive, sedentary: sedentary, veryActive: veryActive,
+            asleep: asleep, awake: awake, awakenings: awakenings, duration: duration, rem: rem, light: light, deep: deep
           });
+        });
 
-        setData(Array.from(data.values()));
+        setData(data);
       });
     }, []);
 
