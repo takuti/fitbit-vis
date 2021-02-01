@@ -81,7 +81,7 @@ export const ScatterPlot = ({
         style={{ 
           position: 'absolute',
           left: -innerWidth / 2 + yAxisOffset,
-          top: innerHeight * 1.5,
+          top: innerHeight / 1.3,
           transform: 'rotate(-90deg)'
         }}
       >

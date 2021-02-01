@@ -59,6 +59,9 @@
   var xAxisTickFormat = d3.timeFormat('%m/%d/%Y');
   var xAxisLabelOffset = 100;
 
+  var yAxisLabel = 'Weekly Total';
+  var yAxisLabelOffset = 100;
+
   var BarChart = function (ref) {
     var data = ref.data;
     var width = ref.width;
@@ -129,6 +132,10 @@
             ),
             React__default['default'].createElement( AxisLeft, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: 5 }),
+            React__default['default'].createElement( 'text', {
+              className: "axis-label", textAnchor: "middle", transform: ("translate(" + (-yAxisLabelOffset) + "," + (innerHeight / 2) + ") rotate(-90)") },
+              yAxisLabel
+            ),
             React__default['default'].createElement( Marks, {
               data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight }),
             React__default['default'].createElement( 'g', { ref: brushRef })
@@ -260,7 +267,7 @@
           className: "dropdown-container", style: { 
             position: 'absolute',
             left: -innerWidth / 2 + yAxisOffset,
-            top: innerHeight * 1.5,
+            top: innerHeight / 1.3,
             transform: 'rotate(-90deg)'
           } },
           React__default['default'].createElement( ReactDropdown__default['default'], {

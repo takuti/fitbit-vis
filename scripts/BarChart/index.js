@@ -20,6 +20,9 @@ const xAxisLabel = 'Date';
 const xAxisTickFormat = timeFormat('%m/%d/%Y');
 const xAxisLabelOffset = 100;
 
+const yAxisLabel = 'Weekly Total';
+const yAxisLabelOffset = 100;
+
 export const BarChart = ({
   data,
   width,
@@ -103,6 +106,15 @@ export const BarChart = ({
             innerWidth={innerWidth}
             tickOffset={5}
           />
+          <text
+            className="axis-label"
+            textAnchor="middle"
+            transform={`translate(${-yAxisLabelOffset},${
+              innerHeight / 2
+            }) rotate(-90)`}
+          >
+            {yAxisLabel}
+          </text>
           <Marks
             data={binnedData}
             xScale={xScale}
