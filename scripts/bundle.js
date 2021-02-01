@@ -260,7 +260,7 @@
           className: "dropdown-container", style: { 
             position: 'absolute',
             left: -innerWidth / 2 + yAxisOffset,
-            top: innerHeight / 1.3,
+            top: innerHeight * 1.5,
             transform: 'rotate(-90deg)'
           } },
           React__default['default'].createElement( ReactDropdown__default['default'], {
