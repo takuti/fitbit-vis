@@ -45,7 +45,8 @@ export const ScatterPlot = ({
   margin,
   yValue,
   yAttribute,
-  setYAttribute
+  setYAttribute,
+  colorThresholdDate
 }) => {
   const initialXAttribute = 'asleep';
   const [xAttribute, setXAttribute] = useState(
@@ -113,6 +114,7 @@ export const ScatterPlot = ({
             yValue={yValue}
             circleRadius={circleRadius}
             opacity={0.5}
+            colorThresholdDate={colorThresholdDate}
           />
         </g>
       </svg>

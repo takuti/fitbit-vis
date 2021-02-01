@@ -17,8 +17,12 @@ pre {
   font-size: 0.8em;
 }
 
-.mark {
+.mark-green {
   fill: #137B80;
+}
+
+.mark-red {
+  fill: rgba(196, 91, 161, 0.973);
 }
 
 .axis-label {

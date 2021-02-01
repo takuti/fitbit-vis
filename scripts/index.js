@@ -13,6 +13,7 @@ const margin = {
   left: 150,
 };
 const xValue = (d) => d.date;
+const colorThresholdDate = new Date('2020-03-31');
 
 const App = () => {
   const data = useData();
@@ -51,6 +52,7 @@ const App = () => {
         yValue={yValue}
         yAttribute={yAttribute}
         setYAttribute={setYAttribute}
+        colorThresholdDate={colorThresholdDate}
       />
       <BarChart 
         data={data}
@@ -60,6 +62,7 @@ const App = () => {
         xValue={xValue}
         yValue={yValue}
         setBrushExtent={setBrushExtent}
+        colorThresholdDate={colorThresholdDate}
       />
     </>
   );

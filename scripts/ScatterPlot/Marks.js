@@ -5,12 +5,13 @@ export const Marks = ({
   xValue,
   yValue,
   circleRadius,
-  opacity
+  opacity,
+  colorThresholdDate
 }) =>
   data.map(d => {
     if (isNaN(xValue(d))) return;
     return <circle
-      className="mark"
+      className={d.date <= colorThresholdDate ? "mark-green" : "mark-red"}
       cx={xScale(xValue(d))}
       cy={yScale(yValue(d))}
       r={circleRadius}

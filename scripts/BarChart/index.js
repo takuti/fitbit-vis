@@ -30,7 +30,8 @@ export const BarChart = ({
   margin,
   xValue,
   yValue,
-  setBrushExtent
+  setBrushExtent,
+  colorThresholdDate
 }) => {
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
@@ -120,6 +121,7 @@ export const BarChart = ({
             xScale={xScale}
             yScale={yScale}
             innerHeight={innerHeight}
+            colorThresholdDate={colorThresholdDate}
           />
           <g ref={brushRef}></g>
         </g>

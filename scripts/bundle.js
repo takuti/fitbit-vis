@@ -46,10 +46,11 @@
       var xScale = ref.xScale;
       var yScale = ref.yScale;
       var innerHeight = ref.innerHeight;
+      var colorThresholdDate = ref.colorThresholdDate;
 
       return data.map(function (d) { return (
       React.createElement( 'rect', {
-        className: "mark", x: xScale(d.x0), y: yScale(d.y), width: xScale(d.x1) - xScale(d.x0), height: innerHeight - yScale(d.y) },
+        className: d.x0 <= colorThresholdDate ? "mark-green" : "mark-red", x: xScale(d.x0), y: yScale(d.y), width: xScale(d.x1) - xScale(d.x0), height: innerHeight - yScale(d.y) },
         React.createElement( 'title', null, d.y )
       )
     ); });
@@ -70,6 +71,7 @@
     var xValue = ref.xValue;
     var yValue = ref.yValue;
     var setBrushExtent = ref.setBrushExtent;
+    var colorThresholdDate = ref.colorThresholdDate;
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -137,7 +139,7 @@
               yAxisLabel
             ),
             React__default['default'].createElement( Marks, {
-              data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight }),
+              data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight, colorThresholdDate: colorThresholdDate }),
             React__default['default'].createElement( 'g', { ref: brushRef })
           )
         )
@@ -187,11 +189,12 @@
       var yValue = ref.yValue;
       var circleRadius = ref.circleRadius;
       var opacity = ref.opacity;
+      var colorThresholdDate = ref.colorThresholdDate;
 
       return data.map(function (d) {
       if (isNaN(xValue(d))) { return; }
       return React.createElement( 'circle', {
-        className: "mark", cx: xScale(xValue(d)), cy: yScale(yValue(d)), r: circleRadius, opacity: opacity });
+        className: d.date <= colorThresholdDate ? "mark-green" : "mark-red", cx: xScale(xValue(d)), cy: yScale(yValue(d)), r: circleRadius, opacity: opacity });
     });
   };
 
@@ -233,6 +236,7 @@
     var yValue = ref.yValue;
     var yAttribute = ref.yAttribute;
     var setYAttribute = ref.setYAttribute;
+    var colorThresholdDate = ref.colorThresholdDate;
 
     var initialXAttribute = 'asleep';
     var ref$1 = React$1.useState(
@@ -285,7 +289,7 @@
             React__default['default'].createElement( AxisLeft$1, {
               yScale: yScale, innerWidth: innerWidth, tickOffset: tickOffset }),
             React__default['default'].createElement( Marks$1, {
-              data: filteredData, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5 })
+              data: filteredData, xScale: xScale, yScale: yScale, xValue: xValue, yValue: yValue, circleRadius: circleRadius, opacity: 0.5, colorThresholdDate: colorThresholdDate })
           )
         ),
         React__default['default'].createElement( 'div', { 
@@ -425,6 +429,7 @@
     left: 150,
   };
   var xValue = function (d) { return d.date; };
+  var colorThresholdDate = new Date('2020-03-31');
 
   var App = function () {
     var data = useData();
@@ -457,9 +462,9 @@
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
-          data: data, filteredData: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute }),
+          data: data, filteredData: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute, colorThresholdDate: colorThresholdDate }),
         React__default['default'].createElement( BarChart, { 
-          data: data, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent })
+          data: data, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent, colorThresholdDate: colorThresholdDate })
       )
     );
   };
