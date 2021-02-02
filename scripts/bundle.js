@@ -72,6 +72,8 @@
     var yValue = ref.yValue;
     var setBrushExtent = ref.setBrushExtent;
     var colorThresholdDate = ref.colorThresholdDate;
+    var hoveredValue = ref.hoveredValue;
+    var fadeOpacity = ref.fadeOpacity;
 
     var innerHeight = height - margin.top - margin.bottom;
     var innerWidth = width - margin.right - margin.left;
@@ -121,6 +123,11 @@
       });
     });
 
+    var colorValue = function (d) { return (d.x0 <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID'; };
+    var binnedFilteredDataByColor = binnedData.filter(
+      function (d) { return colorValue(d) === hoveredValue; }
+    );
+
     return (
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'svg', { width: width, height: height },
@@ -138,8 +145,12 @@
               className: "axis-label", textAnchor: "middle", transform: ("translate(" + (-yAxisLabelOffset) + "," + (innerHeight / 2) + ") rotate(-90)") },
               yAxisLabel
             ),
+            React__default['default'].createElement( 'g', { opacity: hoveredValue ? fadeOpacity : 1.0 },
+              React__default['default'].createElement( Marks, {
+                data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight, colorThresholdDate: colorThresholdDate })
+            ),
             React__default['default'].createElement( Marks, {
-              data: binnedData, xScale: xScale, yScale: yScale, innerHeight: innerHeight, colorThresholdDate: colorThresholdDate }),
+              data: binnedFilteredDataByColor, xScale: xScale, yScale: yScale, innerHeight: innerHeight, colorThresholdDate: colorThresholdDate }),
             React__default['default'].createElement( 'g', { ref: brushRef })
           )
         )
@@ -224,7 +235,6 @@
   var yAxisOffset = 320;
 
   var tickOffset = 16;
-  var fadeOpacity = 0.2;
 
   var attributes = {
     x: [
@@ -260,6 +270,9 @@
     var yAttribute = ref.yAttribute;
     var setYAttribute = ref.setYAttribute;
     var colorThresholdDate = ref.colorThresholdDate;
+    var hoveredValue = ref.hoveredValue;
+    var setHoveredValue = ref.setHoveredValue;
+    var fadeOpacity = ref.fadeOpacity;
 
     var initialXAttribute = 'asleep';
     var ref$1 = React$1.useState(
@@ -288,9 +301,6 @@
       [data, yValue, innerHeight]
     );
 
-    var ref$2 = React$1.useState(null);
-    var hoveredValue = ref$2[0];
-    var setHoveredValue = ref$2[1];
     var colorValue = function (d) { return (d.date <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID'; };
     var colorScale = d3.scaleOrdinal()
       .domain(data.map(colorValue))
@@ -472,6 +482,7 @@
   };
   var xValue = function (d) { return d.date; };
   var colorThresholdDate = new Date('2020-03-31');
+  var fadeOpacity = 0.2;
 
   var App = function () {
     var data = useData();
@@ -486,6 +497,10 @@
     var yAttribute = ref$1[0];
     var setYAttribute = ref$1[1];
     var yValue = function (d) { return d[yAttribute]; };
+
+    var ref$2 = React$1.useState(null);
+    var hoveredValue = ref$2[0];
+    var setHoveredValue = ref$2[1];
 
     if (!data) {
       return React__default['default'].createElement( 'pre', null, "Loading..." );
@@ -504,9 +519,9 @@
       React__default['default'].createElement( React__default['default'].Fragment, null,
         React__default['default'].createElement( 'h1', { className: "chart-title" }, "Fitbit Activity/Sleep Explorer"),
         React__default['default'].createElement( ScatterPlot, { 
-          data: data, filteredData: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute, colorThresholdDate: colorThresholdDate }),
+          data: data, filteredData: filteredData, width: width, height: height, margin: margin, yValue: yValue, yAttribute: yAttribute, setYAttribute: setYAttribute, colorThresholdDate: colorThresholdDate, hoveredValue: hoveredValue, setHoveredValue: setHoveredValue, fadeOpacity: fadeOpacity }),
         React__default['default'].createElement( BarChart, { 
-          data: data, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent, colorThresholdDate: colorThresholdDate })
+          data: data, width: width, height: height / 1.5, margin: margin, xValue: xValue, yValue: yValue, setBrushExtent: setBrushExtent, colorThresholdDate: colorThresholdDate, hoveredValue: hoveredValue, fadeOpacity: fadeOpacity })
       )
     );
   };

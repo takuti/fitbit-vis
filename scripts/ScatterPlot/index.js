@@ -14,7 +14,6 @@ const xAxisOffset = 150;
 const yAxisOffset = 320;
 
 const tickOffset = 16;
-const fadeOpacity = 0.2;
 
 const attributes = {
   x: [
@@ -49,7 +48,10 @@ export const ScatterPlot = ({
   yValue,
   yAttribute,
   setYAttribute,
-  colorThresholdDate
+  colorThresholdDate,
+  hoveredValue,
+  setHoveredValue,
+  fadeOpacity
 }) => {
   const initialXAttribute = 'asleep';
   const [xAttribute, setXAttribute] = useState(
@@ -78,7 +80,6 @@ export const ScatterPlot = ({
     [data, yValue, innerHeight]
   );
 
-  const [hoveredValue, setHoveredValue] = useState(null);
   const colorValue = (d) => (d.date <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID';
   const colorScale = scaleOrdinal()
     .domain(data.map(colorValue))

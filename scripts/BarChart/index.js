@@ -31,7 +31,9 @@ export const BarChart = ({
   xValue,
   yValue,
   setBrushExtent,
-  colorThresholdDate
+  colorThresholdDate,
+  hoveredValue,
+  fadeOpacity
 }) => {
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.right - margin.left;
@@ -82,6 +84,11 @@ export const BarChart = ({
     });
   });
 
+  const colorValue = (d) => (d.x0 <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID';
+  const binnedFilteredDataByColor = binnedData.filter(
+    (d) => colorValue(d) === hoveredValue
+  );
+
   return (
     <>
       <svg width={width} height={height}>
@@ -116,8 +123,17 @@ export const BarChart = ({
           >
             {yAxisLabel}
           </text>
+          <g opacity={hoveredValue ? fadeOpacity : 1.0}>
+            <Marks
+              data={binnedData}
+              xScale={xScale}
+              yScale={yScale}
+              innerHeight={innerHeight}
+              colorThresholdDate={colorThresholdDate}
+            />
+          </g>
           <Marks
-            data={binnedData}
+            data={binnedFilteredDataByColor}
             xScale={xScale}
             yScale={yScale}
             innerHeight={innerHeight}

@@ -14,6 +14,7 @@ const margin = {
 };
 const xValue = (d) => d.date;
 const colorThresholdDate = new Date('2020-03-31');
+const fadeOpacity = 0.2;
 
 const App = () => {
   const data = useData();
@@ -24,6 +25,8 @@ const App = () => {
     initialYAttribute
   );
   const yValue = (d) => d[yAttribute];
+
+  const [hoveredValue, setHoveredValue] = useState(null);
 
   if (!data) {
     return <pre>Loading...</pre>;
@@ -53,6 +56,9 @@ const App = () => {
         yAttribute={yAttribute}
         setYAttribute={setYAttribute}
         colorThresholdDate={colorThresholdDate}
+        hoveredValue={hoveredValue}
+        setHoveredValue={setHoveredValue}
+        fadeOpacity={fadeOpacity}
       />
       <BarChart 
         data={data}
@@ -63,6 +69,8 @@ const App = () => {
         yValue={yValue}
         setBrushExtent={setBrushExtent}
         colorThresholdDate={colorThresholdDate}
+        hoveredValue={hoveredValue}
+        fadeOpacity={fadeOpacity}
       />
     </>
   );
