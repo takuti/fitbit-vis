@@ -292,7 +292,6 @@
     var hoveredValue = ref$2[0];
     var setHoveredValue = ref$2[1];
     var colorValue = function (d) { return (d.date <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID'; };
-    var colorLegendLabel = 'Timing';
     var colorScale = d3.scaleOrdinal()
       .domain(data.map(colorValue))
       .range(['rgba(196, 91, 161, 0.973)', '#137B80']);
@@ -317,11 +316,7 @@
     } })
         ),
         React__default['default'].createElement( 'svg', { width: width, height: height },
-          React__default['default'].createElement( 'g', { transform: ("translate(" + (innerWidth + 50) + ",60)") },
-            React__default['default'].createElement( 'text', {
-              x: 50, y: -30, className: "axis-label", textAnchor: "middle" },
-              colorLegendLabel
-            ),
+          React__default['default'].createElement( 'g', { transform: ("translate(" + (innerWidth + 50) + ",40)") },
             React__default['default'].createElement( ColorLegend, {
               colorScale: colorScale, tickSpacing: 30, tickSize: circleRadius, tickTextOffset: 20, onHover: setHoveredValue, hoveredValue: hoveredValue, fadeOpacity: fadeOpacity })
           ),

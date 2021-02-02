@@ -80,7 +80,6 @@ export const ScatterPlot = ({
 
   const [hoveredValue, setHoveredValue] = useState(null);
   const colorValue = (d) => (d.date <= colorThresholdDate) ? 'Pre-COVID' : 'Post-COVID';
-  const colorLegendLabel = 'Timing';
   const colorScale = scaleOrdinal()
     .domain(data.map(colorValue))
     .range(['rgba(196, 91, 161, 0.973)', '#137B80']);
@@ -106,15 +105,7 @@ export const ScatterPlot = ({
         />
       </div>
       <svg width={width} height={height}>
-        <g transform={`translate(${innerWidth + 50},60)`}>
-          <text
-            x={50}
-            y={-30}
-            className="axis-label"
-            textAnchor="middle"
-          >
-            {colorLegendLabel}
-          </text>
+        <g transform={`translate(${innerWidth + 50},40)`}>
           <ColorLegend
             colorScale={colorScale}
             tickSpacing={30}
